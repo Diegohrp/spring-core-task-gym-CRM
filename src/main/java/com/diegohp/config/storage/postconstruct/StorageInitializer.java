@@ -1,6 +1,5 @@
-package com.diegohp.config.storage;
+package com.diegohp.config.storage.postconstruct;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.core.io.Resource;

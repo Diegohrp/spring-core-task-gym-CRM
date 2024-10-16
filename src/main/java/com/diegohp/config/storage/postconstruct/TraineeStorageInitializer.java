@@ -1,4 +1,4 @@
-package com.diegohp.config.storage;
+package com.diegohp.config.storage.postconstruct;
 
 import com.diegohp.entity.user.Trainee;
 import com.diegohp.storage.TraineeStorage;

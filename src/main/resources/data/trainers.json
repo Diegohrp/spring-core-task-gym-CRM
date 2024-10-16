@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "firstName": "Carlos",
+    "lastName": "Gonzalez",
+    "username": "Carlos.Gonzalez",
+    "password": "password123",
+    "isActive": true,
+    "speciality": "STRENGTH"
+  },
+  {
+    "id": 2,
+    "firstName": "Ana",
+    "lastName": "Martinez",
+    "username": "Ana.Martinez",
+    "password": "securePass456",
+    "isActive": true,
+    "speciality": "CARDIO"
+  },
+  {
+    "id": 3,
+    "firstName": "Luis",
+    "lastName": "Perez",
+    "username": "Luis.Perez",
+    "password": "mySecret789",
+    "isActive": false,
+    "speciality": "BOXING"
+  },
+  {
+    "id": 4,
+    "firstName": "Sofia",
+    "lastName": "Ramirez",
+    "username": "Sofia.Ramirez",
+    "password": "strongPassword001",
+    "isActive": true,
+    "speciality": "PILATES"
+  }
+]

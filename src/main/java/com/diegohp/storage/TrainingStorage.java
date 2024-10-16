@@ -8,7 +8,7 @@ import java.util.Map;
 public class TrainingStorage {
     private final Map<String, Training> storage = new HashMap<>();
 
-    public Map<String, Training> getTrainingStorage() {
+    public Map<String, Training> getStorage() {
         return storage;
     }
 }

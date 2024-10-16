@@ -8,10 +8,6 @@ public class User {
     private String password;
     private boolean isActive;
 
-    public User() {
-
-    }
-
     public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
         this.id = id;
         this.firstName = firstName;

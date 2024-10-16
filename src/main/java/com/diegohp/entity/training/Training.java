@@ -1,39 +1,52 @@
 package com.diegohp.entity.training;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.sql.Date;
 import java.time.Duration;
 
+
 public class Training {
-    private Long TraineeId;
-    private Long TrainerId;
+    private Long traineeId;
+    private Long trainerId;
     private String name;
     private TrainingType type;
     private Date date;
     private Duration duration;
 
-    public Training(Long traineeId, Long trainerId, String name, TrainingType type, Date date, Duration duration) {
-        TraineeId = traineeId;
-        TrainerId = trainerId;
+    @JsonCreator
+    public Training(@JsonProperty("traineeId") Long traineeId, @JsonProperty("trainerId") Long trainerId,
+                    @JsonProperty("name") String name, @JsonProperty("type") TrainingType type,
+                    @JsonProperty("date") Date date, @JsonProperty("duration") String duration) {
+        this.traineeId = traineeId;
+        this.trainerId = trainerId;
         this.name = name;
         this.type = type;
         this.date = date;
-        this.duration = duration;
+        this.duration = Duration.parse(duration);
+
+    }
+
+    @Override
+    public String toString() {
+        return "Training={ trainerId: " + this.trainerId + ", traineeId: " + this.traineeId + ", name: " + this.name + ", type: " + this.type.getName() + ", date: " + this.date + ", duration: " + this.duration + " }";
     }
 
     public long getTraineeId() {
-        return TraineeId;
+        return traineeId;
     }
 
     public void setTraineeId(long traineeId) {
-        TraineeId = traineeId;
+        this.traineeId = traineeId;
     }
 
     public long getTrainerId() {
-        return TrainerId;
+        return trainerId;
     }
 
     public void setTrainerId(long trainerId) {
-        TrainerId = trainerId;
+        this.trainerId = trainerId;
     }
 
     public String getName() {
