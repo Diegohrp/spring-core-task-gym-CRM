@@ -1,0 +1,42 @@
+[
+  {
+    "id": 1,
+    "firstName": "John",
+    "lastName": "Doe",
+    "username": "John.Doe",
+    "password": "x7Bhs2NpL9",
+    "isActive": true,
+    "dateOfBirth": "1990-01-15",
+    "address": "1234 Elm Street, Springfield, IL"
+  },
+  {
+    "id": 2,
+    "firstName": "Jane",
+    "lastName": "Smith",
+    "username": "Jane.Smith",
+    "password": "nR8zL9pY7B",
+    "isActive": false,
+    "dateOfBirth": "1985-07-22",
+    "address": "5678 Oak Avenue, Metropolis, NY"
+  },
+  {
+    "id": 3,
+    "firstName": "Michael",
+    "lastName": "Johnson",
+    "username": "Michael.Johnson",
+    "password": "P3xYl2Bn9Z",
+    "isActive": true,
+    "dateOfBirth": "1993-03-30",
+    "address": "9101 Maple Drive, Gotham, NJ"
+  },
+  {
+    "id": 4,
+    "firstName": "Emily",
+    "lastName": "Williams",
+    "username": "Emily.Williams",
+    "password": "L7nYs3PxR8",
+    "isActive": true,
+    "dateOfBirth": "1992-09-12",
+    "address": "1357 Birch Lane, Star City, CA"
+  }
+]
