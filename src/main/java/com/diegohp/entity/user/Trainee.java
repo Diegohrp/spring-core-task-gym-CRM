@@ -19,6 +19,18 @@ public class Trainee extends User {
         this.address = address;
     }
 
+    public Trainee(String firstName, String lastName, Date birthday, String address) {
+        super(firstName, lastName);
+        this.dateOfBirth = birthday;
+        this.address = address;
+    }
+
+    public Trainee(Trainee trainee) {
+        super(trainee.getId(), trainee.getFirstName(), trainee.getLastName(), trainee.getUsername(), trainee.getPassword(), trainee.getIsActive());
+        this.dateOfBirth = trainee.getDateOfBirth();
+        this.address = trainee.getAddress();
+    }
+
     public Date getDateOfBirth() {
         return dateOfBirth;
     }

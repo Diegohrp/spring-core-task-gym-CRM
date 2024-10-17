@@ -2,27 +2,87 @@ package com.diegohp.service;
 
 import com.diegohp.dao.TraineeDAO;
 import com.diegohp.entity.user.Trainee;
+import com.diegohp.utils.UserCredentialsGenerator;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
+
 @Service
-public class TraineeService {
+public class TraineeService extends UserService {
+    @Value("${trainee.data.startFromId}")
+    private  Long idGen;
+    private final TraineeDAO traineeDAO;
+    private final UserCredentialsGenerator userCredentialsGenerator;
+    private Logger logger;
+
     @Autowired
-    private TraineeDAO traineeDAO;
-
-    public void createTrainee(Trainee trainee) {
-        traineeDAO.create(trainee);
+    public TraineeService(TraineeDAO traineeDAO, UserCredentialsGenerator userCredentialsGenerator) {
+        this.traineeDAO = traineeDAO;
+        this.userCredentialsGenerator = userCredentialsGenerator;
     }
 
-    public Trainee getTrainee(Long id) {
-        return traineeDAO.getById(id);
+    @Autowired
+    public void setLogger(Logger logger) {
+        this.logger = logger;
     }
 
-    public void updateTrainee(Trainee trainee) {
-        traineeDAO.update(trainee);
+    public Boolean userNameExists(String username) {
+        return traineeDAO.findByUsername(username) != null;
     }
 
-    public void deleteTrainee(Long id) {
+    public void create(Trainee trainee) {
+        Trainee copy = new Trainee(trainee);
+        userCredentialsGenerator.assignCredentials(copy, this::userNameExists);
+        copy.setId(idGen++);
+        traineeDAO.create(copy);
+        logger.info("New Trainee created: {}", copy);
+    }
+
+    public Trainee get(Long id) {
+        Trainee trainee = traineeDAO.findById(id);
+        if (trainee != null) {
+            logger.info("You selected Trainee: {}", trainee);
+        } else {
+            logger.warn("Trainee with ID: {} not found", id);
+        }
+
+        return trainee;
+    }
+
+    public void update(Long id, Trainee data) {
+        Trainee original = traineeDAO.findById(id);
+        Trainee updated = new Trainee(original);
+        super.updateUser(updated, data);
+        if (data.getDateOfBirth() != null)
+            updated.setDateOfBirth(data.getDateOfBirth());
+        if (data.getAddress() != null)
+            updated.setAddress(data.getAddress());
+
+        if (super.usernameMustChange(original, updated)) {
+            updated.setUsername(userCredentialsGenerator
+                    .generateUsername(updated.getFirstName(), updated.getLastName(), this::userNameExists));
+        }
+
+        traineeDAO.update(id, updated);
+        logger.info("Trainee ID: {} has been updated from {} to {}", id, original, updated);
+    }
+
+    public void delete(Long id) {
         traineeDAO.delete(id);
+        logger.info("Trainee with ID {} has been deleted", id);
     }
+
+    public List<Trainee> getAll() {
+        for (Trainee trainee : traineeDAO.getAll()) {
+            logger.info("In Storage: {}", trainee);
+        }
+
+        return traineeDAO.getAll();
+    }
+
 }
+

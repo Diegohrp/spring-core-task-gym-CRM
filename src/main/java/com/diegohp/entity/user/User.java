@@ -6,7 +6,7 @@ public class User {
     private String lastName;
     private String username;
     private String password;
-    private boolean isActive;
+    private boolean isActive = true;
 
     public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
         this.id = id;
@@ -17,12 +17,11 @@ public class User {
         this.isActive = isActive;
     }
 
-    public User(Long id, String firstName, String lastName, boolean isActive) {
-        this.id = id;
+    public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.isActive = isActive;
     }
+
 
     @Override
     public String toString() {
@@ -61,15 +60,15 @@ public class User {
         return password;
     }
 
-    public boolean isActive() {
+    public boolean getIsActive() {
         return isActive;
     }
 
-    public void setActive(boolean active) {
+    public void setIsActive(boolean active) {
         isActive = active;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
