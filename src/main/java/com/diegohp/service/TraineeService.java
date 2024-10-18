@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class TraineeService extends UserService {
     @Value("${trainee.data.startFromId}")
-    private  Long idGen;
+    private Long idGen;
     private final TraineeDAO traineeDAO;
     private final UserCredentialsGenerator userCredentialsGenerator;
     private Logger logger;
@@ -35,14 +35,17 @@ public class TraineeService extends UserService {
     }
 
     public void create(Trainee trainee) {
+        logger.info("-------------------------Trainee Creation----------------------------------------------");
         Trainee copy = new Trainee(trainee);
         userCredentialsGenerator.assignCredentials(copy, this::userNameExists);
         copy.setId(idGen++);
         traineeDAO.create(copy);
         logger.info("New Trainee created: {}", copy);
+
     }
 
     public Trainee get(Long id) {
+        logger.info("-------------------------------Select Trainee-----------------------------------------");
         Trainee trainee = traineeDAO.findById(id);
         if (trainee != null) {
             logger.info("You selected Trainee: {}", trainee);
@@ -54,6 +57,7 @@ public class TraineeService extends UserService {
     }
 
     public void update(Long id, Trainee data) {
+        logger.info("-------------------------------Update Trainee-----------------------------------------");
         Trainee original = traineeDAO.findById(id);
         Trainee updated = new Trainee(original);
         super.updateUser(updated, data);
@@ -72,11 +76,13 @@ public class TraineeService extends UserService {
     }
 
     public void delete(Long id) {
+        logger.info("-------------------------------Delete Trainee-----------------------------------------");
         traineeDAO.delete(id);
         logger.info("Trainee with ID {} has been deleted", id);
     }
 
     public List<Trainee> getAll() {
+        logger.info("-------------------------------Get All Trainees-----------------------------------------");
         for (Trainee trainee : traineeDAO.getAll()) {
             logger.info("In Storage: {}", trainee);
         }

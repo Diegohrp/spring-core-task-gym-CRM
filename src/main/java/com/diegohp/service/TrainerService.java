@@ -1,7 +1,6 @@
 package com.diegohp.service;
 
 import com.diegohp.dao.TrainerDAO;
-import com.diegohp.entity.user.Trainee;
 import com.diegohp.entity.user.Trainer;
 import com.diegohp.utils.UserCredentialsGenerator;
 import org.slf4j.Logger;
@@ -35,6 +34,7 @@ public class TrainerService extends UserService {
     }
 
     public void create(Trainer trainer) {
+        logger.info("-------------------------------Trainer Creation-----------------------------------------");
         Trainer copy = new Trainer(trainer);
         userCredentialsGenerator.assignCredentials(copy, this::userNameExists);
         copy.setId(idGen++);
@@ -43,6 +43,7 @@ public class TrainerService extends UserService {
     }
 
     public Trainer get(Long id) {
+        logger.info("-------------------------------Get Trainer-----------------------------------------");
         Trainer trainer = trainerDAO.findById(id);
         if (trainer != null) {
             logger.info("You selected Trainer: {}", trainer);
@@ -53,18 +54,20 @@ public class TrainerService extends UserService {
     }
 
     public List<Trainer> getAll() {
+        logger.info("-------------------------------Get All Trainers-----------------------------------------");
         for (Trainer trainer : trainerDAO.getAll()) {
             logger.info("In Storage: {}", trainer);
         }
         return trainerDAO.getAll();
     }
 
-    public void update(Long id, Trainer data){
+    public void update(Long id, Trainer data) {
+        logger.info("-------------------------------Update Trainer-----------------------------------------");
         Trainer original = trainerDAO.findById(id);
         Trainer updated = new Trainer(original);
         super.updateUser(updated, data);
 
-        if(data.getSpeciality() != null)
+        if (data.getSpeciality() != null)
             updated.setSpeciality(data.getSpeciality());
 
         if (super.usernameMustChange(original, updated)) {

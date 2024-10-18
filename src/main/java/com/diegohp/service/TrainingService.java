@@ -4,13 +4,11 @@ import com.diegohp.dao.TraineeDAO;
 import com.diegohp.dao.TrainerDAO;
 import com.diegohp.dao.TrainingDAO;
 import com.diegohp.entity.training.Training;
-import com.diegohp.storage.TrainingStorage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -33,6 +31,7 @@ public class TrainingService {
     }
 
     public void create(Training data) {
+        logger.info("-------------------------------Training Creation-----------------------------------------");
         Training training = new Training(data);
         if (trainerDAO.findById(training.getTrainerId()) == null) {
             logger.error("Trainer does not exist");
@@ -60,6 +59,7 @@ public class TrainingService {
     }
 
     public Training get(String id) {
+        logger.info("-------------------------------Select Training-----------------------------------------");
         Training training = trainingDAO.findById(id);
         if (training != null) {
             logger.info("You selected Training: {}", training);
@@ -72,11 +72,11 @@ public class TrainingService {
 
     public List<Training> getAll() {
         List<Training> trainings = trainingDAO.getAll();
-        logger.info("-----------------------------All Trainings in storage:--------------------------------");
+        logger.info("-------------------------------Select All Trainings-----------------------------------------");
         for (Training training : trainings) {
             logger.info("In Storage: {}", training);
         }
-        logger.info("--------------------------------------------------------------------------------------");
+
         return trainings;
     }
 
