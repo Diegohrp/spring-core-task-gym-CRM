@@ -16,6 +16,16 @@ public class Trainer extends User {
         this.speciality = speciality;
     }
 
+    public Trainer(Trainer trainer) {
+        super(trainer.getId(), trainer.getFirstName(), trainer.getLastName(), trainer.getUsername(), trainer.getPassword(), trainer.getIsActive());
+        this.speciality = trainer.getSpeciality();
+    }
+
+    public Trainer(String firstName, String lastName, TrainingType speciality) {
+        super(firstName, lastName);
+        this.speciality = speciality;
+    }
+
     @Override
     public String toString() {
         return "Trainer={ " + super.toString() + ", speciality: " + this.speciality.getName() + " }";

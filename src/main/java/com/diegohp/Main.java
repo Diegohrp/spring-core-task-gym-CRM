@@ -1,8 +1,11 @@
 package com.diegohp;
 
 import com.diegohp.config.AppConfig;
+import com.diegohp.entity.training.TrainingType;
 import com.diegohp.entity.user.Trainee;
+import com.diegohp.entity.user.Trainer;
 import com.diegohp.service.TraineeService;
+import com.diegohp.service.TrainerService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -17,6 +20,7 @@ public class Main {
 
     private static void trainees() throws ParseException {
         TraineeService traineeService = context.getBean(TraineeService.class);
+        //Show all Trainees in storage
         traineeService.getAll();
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -32,7 +36,7 @@ public class Main {
         traineeService.create(t3);
         traineeService.create(t4);
 
-        //Add Trainees with the same firt and last name
+        //Add Trainees with the same first and last name
         traineeService.create(t2);
         traineeService.create(t2);
         traineeService.create(t2);
@@ -50,10 +54,43 @@ public class Main {
         traineeService.get(6L);
         traineeService.get(3L);
 
+        //Show all Trainees in storage
         traineeService.getAll();
+    }
+
+    public static void trainers() {
+        TrainerService trainerService = context.getBean(TrainerService.class);
+
+        //Get All Trainers in sotrage
+        trainerService.getAll();
+
+        Trainer t1 = new Trainer("Carlos", "Gomez", TrainingType.STRENGTH);
+        Trainer t2 = new Trainer("Laura", "Perez", TrainingType.CYCLING);
+        Trainer t3 = new Trainer("Miguel", "Diaz", TrainingType.BOXING);
+        Trainer t4 = new Trainer("Elena", "Martinez", TrainingType.CARDIO);
+
+        //Create Trainers
+        trainerService.create(t1);
+        trainerService.create(t2);
+        trainerService.create(t3);
+        trainerService.create(t4);
+
+        //Add Trainers with same fisrtname and lastname
+        trainerService.create(t3);
+        trainerService.create(t3);
+        trainerService.create(t3);
+
+        //Update Trainers
+        Trainer newData = new Trainer("Miguel", "Perez", TrainingType.CALISTHENICS);
+        trainerService.update(6L, newData);
+
+        //Get all Trainers in storage
+        trainerService.getAll();
+
     }
 
     public static void main(String[] args) throws ParseException {
         trainees();
+        trainers();
     }
 }
