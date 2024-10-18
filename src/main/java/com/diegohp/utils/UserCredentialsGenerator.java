@@ -1,11 +1,20 @@
 package com.diegohp.utils;
 
 import com.diegohp.entity.user.User;
+import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cglib.core.internal.Function;
 import org.springframework.stereotype.Component;
 
 @Component
 public class UserCredentialsGenerator {
+    private Logger logger;
+
+    @Autowired
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
     public String generateUsername(String firstName, String lastName, Function<String, Boolean> usernameExists) {
         String baseUsername = firstName + "." + lastName;
         String username = baseUsername;
@@ -14,7 +23,7 @@ public class UserCredentialsGenerator {
             counter++;
             username = baseUsername + counter;
         }
-
+        logger.info("Username has been generated");
         return username;
     }
 
@@ -26,6 +35,8 @@ public class UserCredentialsGenerator {
             char character = (char) Math.floor(Math.random() * (asciiEnd - asciiStart) + asciiStart);
             sb.append(character);
         }
+        logger.info("Password has been generated");
+
         return sb.toString();
     }
 

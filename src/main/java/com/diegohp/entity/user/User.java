@@ -25,7 +25,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "id: " + this.id + ", firstName: " + this.firstName + ", lastName: " + this.lastName + ", username: " + this.username + ", password: " + this.password + ", isActive: " + this.isActive;
+        return "id: " + this.id + ", firstName: " + this.firstName + ", lastName: " + this.lastName + ", username: " + this.username + ", isActive: " + this.isActive;
     }
 
     public void setUsername(String username) {
