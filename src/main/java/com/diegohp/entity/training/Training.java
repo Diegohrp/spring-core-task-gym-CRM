@@ -3,8 +3,8 @@ package com.diegohp.entity.training;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import java.sql.Date;
 import java.time.Duration;
+import java.util.Date;
 
 
 public class Training {
@@ -28,24 +28,33 @@ public class Training {
 
     }
 
+    public Training(Training training) {
+        this.traineeId = training.getTraineeId();
+        this.trainerId = training.getTrainerId();
+        this.name = training.getName();
+        this.type = training.getType();
+        this.date = training.getDate();
+        this.duration = training.getDuration();
+    }
+
     @Override
     public String toString() {
         return "Training={ trainerId: " + this.trainerId + ", traineeId: " + this.traineeId + ", name: " + this.name + ", type: " + this.type.getName() + ", date: " + this.date + ", duration: " + this.duration + " }";
     }
 
-    public long getTraineeId() {
+    public Long getTraineeId() {
         return traineeId;
     }
 
-    public void setTraineeId(long traineeId) {
+    public void setTraineeId(Long traineeId) {
         this.traineeId = traineeId;
     }
 
-    public long getTrainerId() {
+    public Long getTrainerId() {
         return trainerId;
     }
 
-    public void setTrainerId(long trainerId) {
+    public void setTrainerId(Long trainerId) {
         this.trainerId = trainerId;
     }
 

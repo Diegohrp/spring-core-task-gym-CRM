@@ -1,16 +1,19 @@
 package com.diegohp;
 
 import com.diegohp.config.AppConfig;
+import com.diegohp.entity.training.Training;
 import com.diegohp.entity.training.TrainingType;
 import com.diegohp.entity.user.Trainee;
 import com.diegohp.entity.user.Trainer;
 import com.diegohp.service.TraineeService;
 import com.diegohp.service.TrainerService;
+import com.diegohp.service.TrainingService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
 import java.util.Date;
 
 
@@ -52,7 +55,7 @@ public class Main {
 
         //Get one Trainee
         traineeService.get(6L);
-        traineeService.get(3L);
+        traineeService.get(3L); //Message not found
 
         //Show all Trainees in storage
         traineeService.getAll();
@@ -60,7 +63,6 @@ public class Main {
 
     public static void trainers() {
         TrainerService trainerService = context.getBean(TrainerService.class);
-
         //Get All Trainers in sotrage
         trainerService.getAll();
 
@@ -89,8 +91,39 @@ public class Main {
 
     }
 
+    public static void trainings() {
+        TrainingService trainingService = context.getBean(TrainingService.class);
+        //get all trainings in storage
+        trainingService.getAll();
+
+        Training t1 = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        trainingService.create(t1); //Successful creation
+
+        //trainingService.create(t1); //Message training already exists
+
+        t1.setTrainerId(12L);
+        trainingService.create(t1); //Error mesage, trainer does not exist
+        t1.setTrainerId(1L);
+
+        t1.setTraineeId(5L);
+        trainingService.create(t1); //Error message, trainee does not exist
+        t1.setTraineeId(6L);
+
+        t1.setType(TrainingType.CARDIO);
+        trainingService.create(t1); //Error message, trainig type does not match trainer speciality
+
+        //get one training
+        trainingService.get("2-4");
+        trainingService.get("5-6");
+
+        //get all trainings in storage
+        trainingService.getAll();
+
+    }
+
     public static void main(String[] args) throws ParseException {
         trainees();
         trainers();
+        trainings();
     }
 }
