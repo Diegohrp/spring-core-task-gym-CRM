@@ -31,6 +31,9 @@ public class Trainee extends User {
         this.address = trainee.getAddress();
     }
 
+    public Trainee() {
+    }
+
     public Date getDateOfBirth() {
         return dateOfBirth;
     }

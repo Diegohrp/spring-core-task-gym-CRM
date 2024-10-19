@@ -4,6 +4,7 @@ import com.diegohp.dao.TraineeDAO;
 import com.diegohp.dao.TrainerDAO;
 import com.diegohp.dao.TrainingDAO;
 import com.diegohp.entity.training.Training;
+import com.diegohp.entity.user.Trainer;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,9 @@ public class TrainingService {
     public void create(Training data) {
         logger.info("-------------------------------Training Creation-----------------------------------------");
         Training training = new Training(data);
-        if (trainerDAO.findById(training.getTrainerId()) == null) {
+        Trainer trainer = trainerDAO.findById(training.getTrainerId());
+
+        if (trainer == null) {
             logger.error("Trainer does not exist");
             return;
         }
@@ -45,11 +48,11 @@ public class TrainingService {
         String id = training.getTrainerId().toString() + "-" + training.getTraineeId().toString();
 
         if (trainingDAO.findById(id) != null) {
-            logger.info("This training already exists");
+            logger.error("This training already exists");
             return;
         }
 
-        if (trainerDAO.findById(training.getTrainerId()).getSpeciality() != training.getType()) {
+        if (trainer.getSpeciality() != training.getType()) {
             logger.error("Training type does not match trainer speciality");
             return;
         }
@@ -63,6 +66,7 @@ public class TrainingService {
         Training training = trainingDAO.findById(id);
         if (training != null) {
             logger.info("You selected Training: {}", training);
+            return training;
         } else {
             logger.warn("Training with ID: {} not found", id);
         }
@@ -71,8 +75,9 @@ public class TrainingService {
     }
 
     public List<Training> getAll() {
-        List<Training> trainings = trainingDAO.getAll();
         logger.info("-------------------------------Select All Trainings-----------------------------------------");
+        List<Training> trainings = trainingDAO.getAll();
+
         for (Training training : trainings) {
             logger.info("In Storage: {}", training);
         }
