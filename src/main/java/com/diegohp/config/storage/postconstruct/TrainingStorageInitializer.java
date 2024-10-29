@@ -19,6 +19,6 @@ public class TrainingStorageInitializer extends StorageInitializer<String, Train
 
     @Override
     protected String getId(Training training) {
-        return training.getTrainerId() + "-" + training.getTraineeId();
+        return ""; //training.getTrainerId() + "-" + training.getTraineeId();
     }
 }

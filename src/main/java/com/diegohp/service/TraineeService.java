@@ -12,7 +12,8 @@ import java.util.List;
 
 
 @Service
-public class TraineeService extends UserService {
+public class TraineeService {
+    /*
     @Value("${trainee.data.startFromId}")
     private Long idGen;
     private final TraineeDAO traineeDAO;
@@ -72,7 +73,7 @@ public class TraineeService extends UserService {
         }
 
         traineeDAO.update(id, updated);
-        logger.info("Trainee ID: {} has been updated from {} to {}", id, original, updated);
+        //logger.info("Trainee ID: {} has been updated from {} to {}", id, original, updated);
     }
 
     public void delete(Long id) {
@@ -90,5 +91,6 @@ public class TraineeService extends UserService {
         return traineeDAO.getAll();
     }
 
+ */
 }
 

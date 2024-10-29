@@ -19,8 +19,8 @@ public class TrainingDAO {
     }
 
     public void create(Training training) {
-        String id = training.getTrainerId().toString() + "-" + training.getTraineeId().toString();
-        this.trainingStorage.put(id, training);
+        /*String id = training.getTrainerId().toString() + "-" + training.getTraineeId().toString();
+        this.trainingStorage.put(id, training);*/
     }
 
     public Training findById(String id) {

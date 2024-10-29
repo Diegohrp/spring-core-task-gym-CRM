@@ -1,7 +1,7 @@
 package com.diegohp.dao;
 
 import com.diegohp.entity.training.Training;
-import com.diegohp.entity.training.TrainingType;
+import com.diegohp.entity.training.enums.TrainingType;
 import com.diegohp.storage.TrainingStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

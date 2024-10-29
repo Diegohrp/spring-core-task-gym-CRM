@@ -23,7 +23,7 @@ public abstract class StorageInitializer<K, T> {
 
     protected abstract K getId(T entity);
 
-    @PostConstruct
+   /* @PostConstruct
     public void init() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(dataFile.getInputStream()))) {
             ObjectMapper mapper = new ObjectMapper();
@@ -37,4 +37,6 @@ public abstract class StorageInitializer<K, T> {
             e.printStackTrace();
         }
     }
+
+    */
 }

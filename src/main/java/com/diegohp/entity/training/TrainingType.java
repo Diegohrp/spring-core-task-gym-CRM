@@ -1,24 +1,27 @@
 package com.diegohp.entity.training;
 
-public enum TrainingType {
-    CARDIO("Cardio"),
-    WEIGHTLIFTING("Weightlifting"),
-    STRENGTH("Strength"),
-    POWERLIFTING("Powerlifting"),
-    BODYBUILDING("Bodybuilding"),
-    PILATES("Pilates"),
-    CALISTHENICS("Calisthenics"),
-    BOXING("Boxing"),
-    CYCLING("Cycling");
+import com.diegohp.entity.user.Trainer;
+import jakarta.persistence.*;
 
+import java.util.List;
 
-    private final String name;
+@Entity
+@Table(name = "training_types")
+public class TrainingType {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column
+    private String name;
 
-    TrainingType(String name) {
-        this.name = name;
+    @OneToMany(mappedBy = "speciality")
+    private List<Trainer> trainers;
+
+    @OneToMany(mappedBy = "type")
+    private List<Training> trainings;
+
+    public TrainingType() {
+
     }
 
-    public String getName() {
-        return name;
-    }
 }

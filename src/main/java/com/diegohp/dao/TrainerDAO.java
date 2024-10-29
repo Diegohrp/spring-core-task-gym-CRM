@@ -11,7 +11,7 @@ import java.util.Map;
 
 @Repository
 public class TrainerDAO {
-    private Map<Long, Trainer> trainerStorage = new HashMap<>();
+    /*private Map<Long, Trainer> trainerStorage = new HashMap<>();
 
     @Autowired
     public TrainerDAO(TrainerStorage trainerStorage) {
@@ -43,4 +43,6 @@ public class TrainerDAO {
     public List<Trainer> getAll() {
         return trainerStorage.values().stream().toList();
     }
+
+     */
 }

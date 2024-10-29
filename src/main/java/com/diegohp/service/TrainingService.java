@@ -14,6 +14,7 @@ import java.util.List;
 
 @Service
 public class TrainingService {
+    /*
     private final TrainingDAO trainingDAO;
     private final TraineeDAO traineeDAO;
     private final TrainerDAO trainerDAO;
@@ -84,5 +85,5 @@ public class TrainingService {
 
         return trainings;
     }
-
+*/
 }

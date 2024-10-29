@@ -1,26 +1,18 @@
 package com.diegohp;
 
 import com.diegohp.config.AppConfig;
-import com.diegohp.entity.training.Training;
-import com.diegohp.entity.training.TrainingType;
 import com.diegohp.entity.user.Trainee;
-import com.diegohp.entity.user.Trainer;
-import com.diegohp.service.TraineeService;
-import com.diegohp.service.TrainerService;
-import com.diegohp.service.TrainingService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
-import java.util.Date;
 
 
 public class Main {
     private static final ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
-
+    public static void main(String[] args) {
+        Trainee trainee = new Trainee();
+    }
+    /*
     private static void trainees() throws ParseException {
         TraineeService traineeService = context.getBean(TraineeService.class);
         //Show all Trainees in storage
@@ -122,8 +114,10 @@ public class Main {
     }
 
     public static void main(String[] args) throws ParseException {
-        trainees();
-        trainers();
-        trainings();
+        //trainees();
+        //trainers();
+        //trainings();
     }
+
+     */
 }

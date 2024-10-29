@@ -1,37 +1,64 @@
 package com.diegohp.entity.user;
 
+import com.diegohp.entity.training.Training;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
 
 import java.util.Date;
+import java.util.List;
 
-public class Trainee extends User {
+@Entity
+@Table(name = "trainees")
+public class Trainee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
+    @Column(name = "date_of_birth")
     private Date dateOfBirth;
+
+    @Column
     private String address;
+
+    @OneToOne
+    @JoinColumn(name = "user_id", unique = true)
+    private User user;
+
+    @OneToMany(mappedBy = "trainee")
+    private List<Training> trainings;
 
     @JsonCreator
     public Trainee(@JsonProperty("id") Long id, @JsonProperty("firstName") String firstName,
                    @JsonProperty("lastName") String lastName, @JsonProperty("username") String username,
                    @JsonProperty("password") String password, @JsonProperty("isActive") boolean isActive,
                    @JsonProperty("dateOfBirth") Date birthday, @JsonProperty("address") String address) {
-        super(id, firstName, lastName, username, password, isActive);
+        //super(id, firstName, lastName, username, password, isActive);
         this.dateOfBirth = birthday;
         this.address = address;
     }
 
     public Trainee(String firstName, String lastName, Date birthday, String address) {
-        super(firstName, lastName);
+        //super(firstName, lastName);
         this.dateOfBirth = birthday;
         this.address = address;
     }
 
     public Trainee(Trainee trainee) {
-        super(trainee.getId(), trainee.getFirstName(), trainee.getLastName(), trainee.getUsername(), trainee.getPassword(), trainee.getIsActive());
+        //super(trainee.getId(), trainee.getFirstName(), trainee.getLastName(), trainee.getUsername(), trainee.getPassword(), trainee.getIsActive());
         this.dateOfBirth = trainee.getDateOfBirth();
         this.address = trainee.getAddress();
     }
 
     public Trainee() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Date getDateOfBirth() {

@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Repository
 public class TraineeDAO {
-    private final Map<Long, Trainee> traineeStorage;
+   /* private final Map<Long, Trainee> traineeStorage;
 
     @Autowired
     public TraineeDAO(TraineeStorage storage) {
@@ -46,4 +46,6 @@ public class TraineeDAO {
     public List<Trainee> getAll() {
         return this.traineeStorage.values().stream().toList();
     }
+
+    */
 }

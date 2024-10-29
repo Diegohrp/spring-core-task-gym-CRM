@@ -4,7 +4,7 @@ import com.diegohp.dao.TraineeDAO;
 import com.diegohp.dao.TrainerDAO;
 import com.diegohp.dao.TrainingDAO;
 import com.diegohp.entity.training.Training;
-import com.diegohp.entity.training.TrainingType;
+import com.diegohp.entity.training.enums.TrainingType;
 import com.diegohp.entity.user.Trainee;
 import com.diegohp.entity.user.Trainer;
 import org.junit.jupiter.api.BeforeEach;

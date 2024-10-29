@@ -1,7 +1,7 @@
 package com.diegohp.service;
 
 import com.diegohp.dao.TrainerDAO;
-import com.diegohp.entity.training.TrainingType;
+import com.diegohp.entity.training.enums.TrainingType;
 import com.diegohp.entity.user.Trainer;
 import com.diegohp.utils.UserCredentialsGenerator;
 import org.junit.jupiter.api.BeforeEach;

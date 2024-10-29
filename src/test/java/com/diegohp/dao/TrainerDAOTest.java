@@ -1,7 +1,6 @@
 package com.diegohp.dao;
 
-import com.diegohp.entity.training.TrainingType;
-import com.diegohp.entity.user.Trainee;
+import com.diegohp.entity.training.enums.TrainingType;
 import com.diegohp.entity.user.Trainer;
 import com.diegohp.storage.TrainerStorage;
 import org.junit.jupiter.api.BeforeEach;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

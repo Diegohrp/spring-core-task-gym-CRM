@@ -1,12 +1,30 @@
 package com.diegohp.entity.user;
 
+
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "users")
 public class User {
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @Column(name = "first_name", nullable = false)
     private String firstName;
+    @Column(name = "last_name", nullable = false)
     private String lastName;
+    @Column(nullable = false)
     private String username;
+    @Column(nullable = false)
     private String password;
+    @Column(name = "is_active", nullable = false)
     private boolean isActive = true;
+
+    @OneToOne(mappedBy = "user")
+    private Trainee trainee;
+
+    @OneToOne(mappedBy = "user")
+    private Trainer trainer;
 
     public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
         this.id = id;

@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class TrainerService extends UserService {
-    @Value("${trainer.data.startFromId}")
+    /*@Value("${trainer.data.startFromId}")
     private Long idGen;
     private final TrainerDAO trainerDAO;
     private final UserCredentialsGenerator userCredentialsGenerator;
@@ -78,5 +78,7 @@ public class TrainerService extends UserService {
         trainerDAO.update(id, updated);
         logger.info("Trainer ID: {} has been updated from {} to {}", id, original, updated);
     }
+
+     */
 
 }
