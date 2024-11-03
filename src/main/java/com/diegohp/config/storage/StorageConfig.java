@@ -78,6 +78,7 @@ public class StorageConfig {
     public Properties additionalProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.hbm2ddl.auto", dbDDL);
+        properties.setProperty("hibernate.dialect", dbDialect);
         return properties;
     }
 

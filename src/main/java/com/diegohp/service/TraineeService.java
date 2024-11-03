@@ -1,18 +1,44 @@
 package com.diegohp.service;
 
-import com.diegohp.dao.TraineeDAO;
+import com.diegohp.dto.CreateTraineeDto;
 import com.diegohp.entity.user.Trainee;
+import com.diegohp.entity.user.User;
+import com.diegohp.repository.impl.TraineeRepositoryImpl;
+import com.diegohp.repository.impl.UserRepositoryImpl;
+import com.diegohp.repository.interfaces.TraineeRepository;
+import com.diegohp.repository.interfaces.UserRepository;
 import com.diegohp.utils.UserCredentialsGenerator;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 
 @Service
 public class TraineeService {
+    private final TraineeRepository repository;
+    private final UserService userService;
+    private Logger logger;
+
+    @Autowired
+    public TraineeService(TraineeRepository repository, UserService userService) {
+        this.repository = repository;
+        this.userService = userService;
+    }
+
+    @Autowired
+    public void setLogger(Logger logger) {
+        this.logger = logger;
+    }
+
+    public void create(CreateTraineeDto traineeDto) {
+        logger.info("-------------------------Trainee Creation----------------------------------------------");
+        User user = userService.create(traineeDto.getFirstName(), traineeDto.getLastName());
+        Trainee trainee = new Trainee(traineeDto.getDateOfBirth(), traineeDto.getAddress());
+        trainee.setUser(user);
+        repository.create(trainee);
+        logger.info("New Trainee created: {}", trainee);
+    }
+
     /*
     @Value("${trainee.data.startFromId}")
     private Long idGen;

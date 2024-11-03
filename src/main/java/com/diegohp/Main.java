@@ -1,16 +1,24 @@
 package com.diegohp;
 
 import com.diegohp.config.AppConfig;
+import com.diegohp.dto.CreateTraineeDto;
 import com.diegohp.entity.user.Trainee;
+import com.diegohp.service.TraineeService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+
+import java.util.Date;
 
 
 public class Main {
     private static final ApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
 
     public static void main(String[] args) {
-        Trainee trainee = new Trainee();
+        TraineeService traineeService = context.getBean(TraineeService.class);
+        CreateTraineeDto createTraineeDto = new CreateTraineeDto(
+                "Miguel", "Diaz", new Date(), "Reseda"
+        );
+        traineeService.create(createTraineeDto);
     }
     /*
     private static void trainees() throws ParseException {

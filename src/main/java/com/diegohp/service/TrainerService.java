@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class TrainerService extends UserService {
+public class TrainerService {
     /*@Value("${trainer.data.startFromId}")
     private Long idGen;
     private final TrainerDAO trainerDAO;

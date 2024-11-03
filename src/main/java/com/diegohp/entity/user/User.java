@@ -18,7 +18,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Column(name = "is_active", nullable = false)
-    private boolean isActive = true;
+    private boolean isActive;
 
     @OneToOne(mappedBy = "user")
     private Trainee trainee;
@@ -38,6 +38,7 @@ public class User {
     public User(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
+        this.isActive = true;
     }
 
     public User() {
@@ -46,7 +47,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "id: " + this.id + ", firstName: " + this.firstName + ", lastName: " + this.lastName + ", username: " + this.username + ", isActive: " + this.isActive;
+        return "User={ user_id: " + this.id + ", firstName: " + this.firstName + ", lastName: " + this.lastName + ", username: " + this.username + ", isActive: " + this.isActive + " }";
     }
 
     public void setUsername(String username) {

@@ -22,14 +22,13 @@ public class Trainee {
     private String address;
 
     @OneToOne
-    @JoinColumn(name = "user_id", unique = true)
+    @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "trainee")
     private List<Training> trainings;
 
-    @JsonCreator
-    public Trainee(@JsonProperty("id") Long id, @JsonProperty("firstName") String firstName,
+    /*public Trainee(@JsonProperty("id") Long id, @JsonProperty("firstName") String firstName,
                    @JsonProperty("lastName") String lastName, @JsonProperty("username") String username,
                    @JsonProperty("password") String password, @JsonProperty("isActive") boolean isActive,
                    @JsonProperty("dateOfBirth") Date birthday, @JsonProperty("address") String address) {
@@ -37,9 +36,9 @@ public class Trainee {
         this.dateOfBirth = birthday;
         this.address = address;
     }
+     */
 
-    public Trainee(String firstName, String lastName, Date birthday, String address) {
-        //super(firstName, lastName);
+    public Trainee(Date birthday, String address) {
         this.dateOfBirth = birthday;
         this.address = address;
     }
@@ -79,6 +78,14 @@ public class Trainee {
 
     @Override
     public String toString() {
-        return "Trainee={ " + super.toString() + ", dateOfBirth: " + this.dateOfBirth + ", address: " + this.address + " }";
+        return "Trainee={ id: " + this.id + ", " + this.user + ", dateOfBirth: " + this.dateOfBirth + ", address: " + this.address + " }";
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
