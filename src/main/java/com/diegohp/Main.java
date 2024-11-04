@@ -1,8 +1,10 @@
 package com.diegohp;
 
 import com.diegohp.config.AppConfig;
-import com.diegohp.dto.CreateTraineeDto;
-import com.diegohp.entity.user.Trainee;
+import com.diegohp.dto.trainee.CreateTraineeDto;
+import com.diegohp.dto.trainee.UpdateTraineeDto;
+import com.diegohp.dto.user.CreateUserDto;
+import com.diegohp.dto.user.UpdateUserDto;
 import com.diegohp.service.TraineeService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -16,9 +18,14 @@ public class Main {
     public static void main(String[] args) {
         TraineeService traineeService = context.getBean(TraineeService.class);
         CreateTraineeDto createTraineeDto = new CreateTraineeDto(
-                "Miguel", "Diaz", new Date(), "Reseda"
+                new CreateUserDto("Miguel", "Diaz"), new Date(), "Reseda"
         );
         traineeService.create(createTraineeDto);
+        traineeService.getByUsername("Miguel.Diaz");
+        traineeService.update("Miguel.Diaz", new UpdateTraineeDto(
+                new UpdateUserDto("El Serpiente", null, null, null),
+                null, null
+        ));
     }
     /*
     private static void trainees() throws ParseException {

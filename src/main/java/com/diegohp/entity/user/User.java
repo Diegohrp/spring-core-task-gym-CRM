@@ -18,7 +18,7 @@ public class User {
     @Column(nullable = false)
     private String password;
     @Column(name = "is_active", nullable = false)
-    private boolean isActive;
+    private Boolean isActive;
 
     @OneToOne(mappedBy = "user")
     private Trainee trainee;
@@ -26,13 +26,13 @@ public class User {
     @OneToOne(mappedBy = "user")
     private Trainer trainer;
 
-    public User(Long id, String firstName, String lastName, String username, String password, boolean isActive) {
-        this.id = id;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.username = username;
-        this.password = password;
-        this.isActive = isActive;
+    public User(User user) {
+        this.id = user.getId();
+        this.firstName = user.getFirstName();
+        this.lastName = user.getLastName();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.isActive = user.getIsActive();
     }
 
     public User(String firstName, String lastName) {
@@ -55,7 +55,9 @@ public class User {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        if (password != null) {
+            this.password = password;
+        }
     }
 
     public String getFirstName() {
@@ -63,15 +65,20 @@ public class User {
     }
 
     public void setFirstName(String firstName) {
-        this.firstName = firstName;
+        if (firstName != null) {
+            this.firstName = firstName;
+        }
     }
+
 
     public String getLastName() {
         return lastName;
     }
 
     public void setLastName(String lastName) {
-        this.lastName = lastName;
+        if (lastName != null) {
+            this.lastName = lastName;
+        }
     }
 
     public String getUsername() {
@@ -86,8 +93,10 @@ public class User {
         return isActive;
     }
 
-    public void setIsActive(boolean active) {
-        isActive = active;
+    public void setIsActive(Boolean active) {
+        if (active != null) {
+            isActive = active;
+        }
     }
 
     public Long getId() {

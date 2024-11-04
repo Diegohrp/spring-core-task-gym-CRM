@@ -1,12 +1,13 @@
 package com.diegohp.service;
 
+import com.diegohp.dto.user.UpdateUserDto;
 import com.diegohp.entity.user.User;
 import com.diegohp.repository.interfaces.UserRepository;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cglib.core.internal.Function;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class UserService {
@@ -30,6 +31,19 @@ public class UserService {
         user.setPassword(this.generatePassword());
         repository.create(user);
         return user;
+    }
+
+    public void updateUser(User user, UpdateUserDto userDto) {
+        String prevFirstName = user.getFirstName();
+        String prevLastName = user.getLastName();
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setPassword(userDto.getNewPassword());
+        user.setIsActive(userDto.getActive());
+        if (usernameMustChange(user, prevFirstName, prevLastName)) {
+            user.setUsername(generateUsername(user.getFirstName(), user.getLastName()));
+        }
+        repository.update(user);
     }
 
 
@@ -62,22 +76,10 @@ public class UserService {
         return sb.toString();
     }
 
-    public void updateUser(User user, User data) {
-        if (data.getFirstName() != null)
-            user.setFirstName(data.getFirstName());
 
-        if (data.getLastName() != null)
-            user.setLastName(data.getLastName());
-
-        if (data.getPassword() != null)
-            user.setPassword(data.getPassword());
-
-        user.setIsActive(data.getIsActive());
-    }
-
-    public boolean usernameMustChange(User original, User updated) {
-        return !updated.getFirstName().equals(original.getFirstName())
-                || !updated.getLastName().equals(original.getLastName());
+    public boolean usernameMustChange(User updated, String prevFirstName, String prevLastName) {
+        return !updated.getFirstName().equals(prevFirstName)
+                || !updated.getLastName().equals(prevLastName);
     }
 }
 

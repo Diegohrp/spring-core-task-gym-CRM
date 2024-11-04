@@ -44,7 +44,9 @@ public class Trainee {
     }
 
     public Trainee(Trainee trainee) {
-        //super(trainee.getId(), trainee.getFirstName(), trainee.getLastName(), trainee.getUsername(), trainee.getPassword(), trainee.getIsActive());
+        this.id = trainee.getId();
+        this.trainings = trainee.trainings;
+        this.user = new User(trainee.getUser());
         this.dateOfBirth = trainee.getDateOfBirth();
         this.address = trainee.getAddress();
     }
@@ -65,7 +67,10 @@ public class Trainee {
     }
 
     public void setDateOfBirth(Date dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
+        if (dateOfBirth != null) {
+            this.dateOfBirth = dateOfBirth;
+        }
+
     }
 
     public String getAddress() {
@@ -73,7 +78,9 @@ public class Trainee {
     }
 
     public void setAddress(String address) {
-        this.address = address;
+        if (address != null) {
+            this.address = address;
+        }
     }
 
     @Override

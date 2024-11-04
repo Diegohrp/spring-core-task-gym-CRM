@@ -11,6 +11,8 @@ public interface TraineeRepository {
 
     Optional<Trainee> getById(Long id);
 
+    Optional<Trainee> getByUsername(String username);
+
     void update(Trainee trainee);
 
     void delete(Trainee trainee);
