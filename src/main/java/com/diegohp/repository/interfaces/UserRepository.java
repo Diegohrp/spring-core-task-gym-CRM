@@ -15,6 +15,4 @@ public interface UserRepository {
 
     void update(User user);
 
-    void toggleActive(User user);
-
 }

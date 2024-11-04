@@ -48,6 +48,7 @@ public class UserService {
         repository.update(user);
     }
 
+    @Transactional
     public void toggleActive(String username, Boolean active) {
         Optional<User> user = repository.findByUsername(username);
         if (user.isEmpty()) {
@@ -56,6 +57,7 @@ public class UserService {
         }
         user.get().setIsActive(active);
         repository.update(user.get());
+        logger.info("User {} has change their isActive status to: {}", username, active);
     }
 
 

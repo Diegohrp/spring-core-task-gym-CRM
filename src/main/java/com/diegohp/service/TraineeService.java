@@ -51,6 +51,7 @@ public class TraineeService {
         return trainee;
     }
 
+    @Transactional
     public Optional<Trainee> getByUsername(String username) {
         logger.info("-------------------------------Select Trainee By Username-----------------------------------------");
         Optional<Trainee> trainee = repository.getByUsername(username);
@@ -75,19 +76,22 @@ public class TraineeService {
             repository.update(trainee.get());
             logger.info("Trainee : {} has been updated from {} to {}", username, original, trainee.get());
         }
+    }
 
+    public void toggleActive(String username, Boolean active) {
+        logger.info("--------------------------------------- Modifying Trainee Status -----------------------------------");
+        userService.toggleActive(username, active);
     }
 
     @Transactional
     public void delete(String username) {
-        logger.info("-------------------------------Delete Trainee-----------------------------------------");
+        logger.info("---------------------------------------- Delete Trainee --------------------------------------------");
         Optional<Trainee> trainee = this.getByUsername(username);
         if (trainee.isPresent()) {
             repository.delete(trainee.get());
             logger.info("Trainee with username {} has been deleted", username);
         }
     }
-
 
 }
 

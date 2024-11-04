@@ -26,6 +26,7 @@ public class Main {
                 new UpdateUserDto("El Serpiente", null, null, null),
                 null, null
         ));
+        traineeService.toggleActive("El Serpiente.Diaz", false);
         traineeService.delete("Miguel.Diaz");
         traineeService.delete("El Serpiente.Diaz");
     }
