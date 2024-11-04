@@ -26,6 +26,8 @@ public class Main {
                 new UpdateUserDto("El Serpiente", null, null, null),
                 null, null
         ));
+        traineeService.delete("Miguel.Diaz");
+        traineeService.delete("El Serpiente.Diaz");
     }
     /*
     private static void trainees() throws ParseException {

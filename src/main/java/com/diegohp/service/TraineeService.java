@@ -57,7 +57,7 @@ public class TraineeService {
         if (trainee.isPresent()) {
             logger.info("You selected Trainee with username {}: {}", username, trainee.get());
         } else {
-            logger.warn("Trainee with username: {} not found", username);
+            logger.error("Trainee with username: {} not found", username);
         }
         return trainee;
     }
@@ -65,102 +65,29 @@ public class TraineeService {
     @Transactional
     public void update(String username, UpdateTraineeDto traineeDto) {
         logger.info("-------------------------------Update Trainee-----------------------------------------");
-        Optional<Trainee> trainee = repository.getByUsername(username);
-        if (trainee.isEmpty()) {
-            logger.error("The user with username {} does not exist", username);
-            return;
-        }
-        logger.info("Gotten Trainee: {}", trainee.get());
-        Trainee original = new Trainee(trainee.get());
-        User user = trainee.get().getUser();
-        userService.updateUser(user, traineeDto.getUserDto());
-        //trainee.get().setUser(user);
-        trainee.get().setDateOfBirth(traineeDto.getDateOfBirth());
-        trainee.get().setAddress(traineeDto.getAddress());
-        repository.update(trainee.get());
-        logger.info("Trainee : {} has been updated from {} to {}", username, original, trainee.get());
-    }
-
-
-
-    /*
-    @Value("${trainee.data.startFromId}")
-    private Long idGen;
-    private final TraineeDAO traineeDAO;
-    private final UserCredentialsGenerator userCredentialsGenerator;
-    private Logger logger;
-
-    @Autowired
-    public TraineeService(TraineeDAO traineeDAO, UserCredentialsGenerator userCredentialsGenerator) {
-        this.traineeDAO = traineeDAO;
-        this.userCredentialsGenerator = userCredentialsGenerator;
-    }
-
-    @Autowired
-    public void setLogger(Logger logger) {
-        this.logger = logger;
-    }
-
-    public Boolean userNameExists(String username) {
-        return traineeDAO.findByUsername(username) != null;
-    }
-
-    public void create(Trainee trainee) {
-        logger.info("-------------------------Trainee Creation----------------------------------------------");
-        Trainee copy = new Trainee(trainee);
-        userCredentialsGenerator.assignCredentials(copy, this::userNameExists);
-        copy.setId(idGen++);
-        traineeDAO.create(copy);
-        logger.info("New Trainee created: {}", copy);
-
-    }
-
-    public Trainee get(Long id) {
-        logger.info("-------------------------------Select Trainee-----------------------------------------");
-        Trainee trainee = traineeDAO.findById(id);
-        if (trainee != null) {
-            logger.info("You selected Trainee: {}", trainee);
-        } else {
-            logger.warn("Trainee with ID: {} not found", id);
+        Optional<Trainee> trainee = this.getByUsername(username);
+        if (trainee.isPresent()) {
+            Trainee original = new Trainee(trainee.get());
+            User user = trainee.get().getUser();
+            userService.updateUser(user, traineeDto.getUserDto());
+            trainee.get().setDateOfBirth(traineeDto.getDateOfBirth());
+            trainee.get().setAddress(traineeDto.getAddress());
+            repository.update(trainee.get());
+            logger.info("Trainee : {} has been updated from {} to {}", username, original, trainee.get());
         }
 
-        return trainee;
     }
 
-    public void update(Long id, Trainee data) {
-        logger.info("-------------------------------Update Trainee-----------------------------------------");
-        Trainee original = traineeDAO.findById(id);
-        Trainee updated = new Trainee(original);
-        super.updateUser(updated, data);
-        if (data.getDateOfBirth() != null)
-            updated.setDateOfBirth(data.getDateOfBirth());
-        if (data.getAddress() != null)
-            updated.setAddress(data.getAddress());
-
-        if (super.usernameMustChange(original, updated)) {
-            updated.setUsername(userCredentialsGenerator
-                    .generateUsername(updated.getFirstName(), updated.getLastName(), this::userNameExists));
-        }
-
-        traineeDAO.update(id, updated);
-        //logger.info("Trainee ID: {} has been updated from {} to {}", id, original, updated);
-    }
-
-    public void delete(Long id) {
+    @Transactional
+    public void delete(String username) {
         logger.info("-------------------------------Delete Trainee-----------------------------------------");
-        traineeDAO.delete(id);
-        logger.info("Trainee with ID {} has been deleted", id);
-    }
-
-    public List<Trainee> getAll() {
-        logger.info("-------------------------------Get All Trainees-----------------------------------------");
-        for (Trainee trainee : traineeDAO.getAll()) {
-            logger.info("In Storage: {}", trainee);
+        Optional<Trainee> trainee = this.getByUsername(username);
+        if (trainee.isPresent()) {
+            repository.delete(trainee.get());
+            logger.info("Trainee with username {} has been deleted", username);
         }
-
-        return traineeDAO.getAll();
     }
 
- */
+
 }
 

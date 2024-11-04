@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 
 @Service
 public class UserService {
@@ -44,6 +46,16 @@ public class UserService {
             user.setUsername(generateUsername(user.getFirstName(), user.getLastName()));
         }
         repository.update(user);
+    }
+
+    public void toggleActive(String username, Boolean active) {
+        Optional<User> user = repository.findByUsername(username);
+        if (user.isEmpty()) {
+            logger.error("The user you want to change status does not exist");
+            return;
+        }
+        user.get().setIsActive(active);
+        repository.update(user.get());
     }
 
 
