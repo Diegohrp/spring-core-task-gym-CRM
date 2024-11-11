@@ -24,4 +24,11 @@ public class TrainingType {
 
     }
 
+    public TrainingType(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

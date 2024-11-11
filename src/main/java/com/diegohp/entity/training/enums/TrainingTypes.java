@@ -1,6 +1,6 @@
 package com.diegohp.entity.training.enums;
 
-public enum TrainingType {
+public enum TrainingTypes {
     CARDIO("Cardio"),
     WEIGHTLIFTING("Weightlifting"),
     STRENGTH("Strength"),
@@ -14,7 +14,7 @@ public enum TrainingType {
 
     private final String name;
 
-    TrainingType(String name) {
+    TrainingTypes(String name) {
         this.name = name;
     }
 

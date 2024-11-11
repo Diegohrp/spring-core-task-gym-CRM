@@ -1,27 +1,33 @@
 package com.diegohp.service;
 
-import com.diegohp.dao.TrainerDAO;
+import com.diegohp.dto.trainer.CreateTrainerDto;
+import com.diegohp.dto.trainer.UpdateTrainerDto;
+
 import com.diegohp.entity.user.Trainer;
-import com.diegohp.utils.UserCredentialsGenerator;
+import com.diegohp.entity.user.User;
+import com.diegohp.repository.interfaces.TrainerRepository;
+
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+
+import java.util.Optional;
 
 @Service
 public class TrainerService {
-    /*@Value("${trainer.data.startFromId}")
-    private Long idGen;
-    private final TrainerDAO trainerDAO;
-    private final UserCredentialsGenerator userCredentialsGenerator;
+    private UserService userService;
+    private TrainingTypeService trainingTypeService;
+    private TrainerRepository repository;
     private Logger logger;
 
     @Autowired
-    public TrainerService(TrainerDAO trainerDAO, UserCredentialsGenerator userCredentialsGenerator) {
-        this.trainerDAO = trainerDAO;
-        this.userCredentialsGenerator = userCredentialsGenerator;
+    public TrainerService(UserService userService, TrainingTypeService trainingTypeService, TrainerRepository repository) {
+        this.userService = userService;
+        this.trainingTypeService = trainingTypeService;
+        this.repository = repository;
     }
 
     @Autowired
@@ -29,56 +35,56 @@ public class TrainerService {
         this.logger = logger;
     }
 
-    public Boolean userNameExists(String username) {
-        return trainerDAO.findByUsername(username) != null;
+    @Transactional
+    public void create(CreateTrainerDto trainerDto) {
+        logger.info("---------------------------------------------- Trainer Creation ----------------------------------------------");
+        Trainer trainer = new Trainer();
+        try {
+            trainer.setSpeciality(trainingTypeService.getById(trainerDto.getSpeciality()));
+            User user = userService.create(trainerDto.getUserDto().getFirstName(), trainerDto.getUserDto().getLastName());
+            trainer.setUser(user);
+            repository.create(trainer);
+            logger.info("New Trainer created: {}", trainer);
+        } catch (EntityNotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-    public void create(Trainer trainer) {
-        logger.info("-------------------------------Trainer Creation-----------------------------------------");
-        Trainer copy = new Trainer(trainer);
-        userCredentialsGenerator.assignCredentials(copy, this::userNameExists);
-        copy.setId(idGen++);
-        trainerDAO.create(copy);
-        logger.info("New Trainer created: {}", copy);
-    }
-
-    public Trainer get(Long id) {
-        logger.info("-------------------------------Get Trainer-----------------------------------------");
-        Trainer trainer = trainerDAO.findById(id);
-        if (trainer != null) {
-            logger.info("You selected Trainer: {}", trainer);
+    @Transactional
+    public Optional<Trainer> getByUsername(String username) {
+        logger.info("-------------------------------Select Trainer By Username-----------------------------------------");
+        Optional<Trainer> trainer = repository.getByUsername(username);
+        if (trainer.isPresent()) {
+            logger.info("You selected Trainer with username {}: {}", username, trainer.get());
         } else {
-            logger.warn("Trainer with ID: {} not found", id);
+            logger.error("Trainer with username: {} not found", username);
         }
         return trainer;
     }
 
-    public List<Trainer> getAll() {
-        logger.info("-------------------------------Get All Trainers-----------------------------------------");
-        for (Trainer trainer : trainerDAO.getAll()) {
-            logger.info("In Storage: {}", trainer);
-        }
-        return trainerDAO.getAll();
-    }
-
-    public void update(Long id, Trainer data) {
+    @Transactional
+    public void update(String username, UpdateTrainerDto trainerDto) {
         logger.info("-------------------------------Update Trainer-----------------------------------------");
-        Trainer original = trainerDAO.findById(id);
-        Trainer updated = new Trainer(original);
-        super.updateUser(updated, data);
-
-        if (data.getSpeciality() != null)
-            updated.setSpeciality(data.getSpeciality());
-
-        if (super.usernameMustChange(original, updated)) {
-            updated.setUsername(userCredentialsGenerator
-                    .generateUsername(updated.getFirstName(), updated.getLastName(), this::userNameExists));
+        Optional<Trainer> trainer = this.getByUsername(username);
+        if (trainer.isEmpty()) {
+            return;
         }
-
-        trainerDAO.update(id, updated);
-        logger.info("Trainer ID: {} has been updated from {} to {}", id, original, updated);
+        Trainer original = new Trainer(trainer.get());
+        userService.updateUser(trainer.get().getUser(), trainerDto.getUserDto());
+        try {
+            Long specialityId = trainerDto.getSpeciality();
+            if (specialityId != null) {
+                trainer.get().setSpeciality(trainingTypeService.getById(specialityId));
+            }
+            repository.update(trainer.get());
+            logger.info("Trainee : {} has been updated from {} to {}", username, original, trainer.get());
+        } catch (EntityNotFoundException e) {
+            logger.error(e.getMessage());
+        }
     }
 
-     */
-
+    public void toggleActive(String username, Boolean active) {
+        logger.info("--------------------------------------- Modifying Trainer Status -----------------------------------");
+        userService.toggleActive(username, active);
+    }
 }

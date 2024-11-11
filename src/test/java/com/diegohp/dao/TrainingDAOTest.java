@@ -1,7 +1,7 @@
 package com.diegohp.dao;
 
 import com.diegohp.entity.training.Training;
-import com.diegohp.entity.training.enums.TrainingType;
+import com.diegohp.entity.training.enums.TrainingTypes;
 import com.diegohp.storage.TrainingStorage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,14 +33,14 @@ class TrainingDAOTest {
 
     @Test
     void testCreate() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
         trainingDAO.create(training);
         assertEquals(training, trainingStorage.get("5-6"));
     }
 
     @Test
     void testFindById() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
         trainingStorage.put("5-6", training);
         assertEquals(training, trainingDAO.findById("5-6"));
         assertNull(trainingDAO.findById("nonexistent"));
@@ -48,8 +48,8 @@ class TrainingDAOTest {
 
     @Test
     void getAll() {
-        Training training1 = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
-        Training training2 = new Training(3L, 4L, "Morning Weight Training", TrainingType.WEIGHTLIFTING, new Date(), "PT1H");
+        Training training1 = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
+        Training training2 = new Training(3L, 4L, "Morning Weight Training", TrainingTypes.WEIGHTLIFTING, new Date(), "PT1H");
         trainingStorage.put("5-6", training1);
         trainingStorage.put("4-3", training2);
         List<Training> allTrainings = trainingDAO.getAll();

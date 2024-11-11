@@ -92,6 +92,5 @@ public class TraineeService {
             logger.info("Trainee with username {} has been deleted", username);
         }
     }
-
 }
 

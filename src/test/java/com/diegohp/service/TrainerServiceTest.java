@@ -1,7 +1,7 @@
 package com.diegohp.service;
 
 import com.diegohp.dao.TrainerDAO;
-import com.diegohp.entity.training.enums.TrainingType;
+import com.diegohp.entity.training.enums.TrainingTypes;
 import com.diegohp.entity.user.Trainer;
 import com.diegohp.utils.UserCredentialsGenerator;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,7 +45,7 @@ class TrainerServiceTest {
 
     @Test
     void testUserNameExists() {
-        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingType.BOXING);
+        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
 
         when(trainerDAO.findByUsername("existing")).thenReturn(trainer);
         when(trainerDAO.findByUsername("nonexisting")).thenReturn(null);
@@ -56,8 +56,8 @@ class TrainerServiceTest {
 
     @Test
     void testCreate() {
-        Trainer trainer1 = new Trainer("Miguel", "Diaz", TrainingType.BOXING);
-        Trainer trainer2 = new Trainer("Jane", "Doe", TrainingType.CYCLING);
+        Trainer trainer1 = new Trainer("Miguel", "Diaz", TrainingTypes.BOXING);
+        Trainer trainer2 = new Trainer("Jane", "Doe", TrainingTypes.CYCLING);
 
         doNothing().when(userCredentialsGenerator).assignCredentials(any(Trainer.class), any());
 
@@ -71,7 +71,7 @@ class TrainerServiceTest {
 
     @Test
     void testGet() {
-        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingType.BOXING);
+        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
         when(trainerDAO.findById(trainer.getId())).thenReturn(trainer);
 
         assertEquals(trainer, trainerService.get(1L));
@@ -87,8 +87,8 @@ class TrainerServiceTest {
 
     @Test
     void testGetAll() {
-        Trainer trainer1 = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingType.BOXING);
-        Trainer trainer2 = new Trainer(2L, "Jane", "Doe", "Jane.Doe", "4Et49&kP<-", true, TrainingType.CYCLING);
+        Trainer trainer1 = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
+        Trainer trainer2 = new Trainer(2L, "Jane", "Doe", "Jane.Doe", "4Et49&kP<-", true, TrainingTypes.CYCLING);
 
         List<Trainer> trainers = Arrays.asList(trainer1, trainer2);
         when(trainerDAO.getAll()).thenReturn(trainers);
@@ -99,11 +99,11 @@ class TrainerServiceTest {
 
     @Test
     void testUpdate() {
-        Trainer original = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingType.BOXING);
+        Trainer original = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
         Trainer updated = new Trainer(original);
         updated.setFirstName("John");
         updated.setLastName("Doe");
-        updated.setSpeciality(TrainingType.STRENGTH);
+        updated.setSpeciality(TrainingTypes.STRENGTH);
 
         when(trainerDAO.findById(original.getId())).thenReturn(original);
         when(userCredentialsGenerator.generateUsername(anyString(), anyString(), any())).thenReturn("John.Doe");
@@ -111,7 +111,7 @@ class TrainerServiceTest {
         trainerService.update(1L, updated);
         verify(trainerDAO).update(eq(1L), argThat(t -> t.getFirstName().equals("John")
                 && t.getLastName().equals("Doe")
-                && t.getSpeciality() == TrainingType.STRENGTH));
+                && t.getSpeciality() == TrainingTypes.STRENGTH));
         verify(logger).info(contains("Update Trainer"));
     }
 

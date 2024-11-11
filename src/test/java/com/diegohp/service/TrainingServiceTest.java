@@ -4,7 +4,7 @@ import com.diegohp.dao.TraineeDAO;
 import com.diegohp.dao.TrainerDAO;
 import com.diegohp.dao.TrainingDAO;
 import com.diegohp.entity.training.Training;
-import com.diegohp.entity.training.enums.TrainingType;
+import com.diegohp.entity.training.enums.TrainingTypes;
 import com.diegohp.entity.user.Trainee;
 import com.diegohp.entity.user.Trainer;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +48,7 @@ class TrainingServiceTest {
 
     @Test
     void testCreate_trainerDoesNotExist() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
 
         when(trainerDAO.findById(training.getTrainerId())).thenReturn(null);
 
@@ -60,7 +60,7 @@ class TrainingServiceTest {
 
     @Test
     void testCreate_traineeDoesNotExist() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
 
         when(trainerDAO.findById(training.getTrainerId())).thenReturn(new Trainer());
         when(traineeDAO.findById(training.getTraineeId())).thenReturn(null);
@@ -75,7 +75,7 @@ class TrainingServiceTest {
 
     @Test
     void testCreate_duplicateTraining() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
 
         when(trainerDAO.findById(training.getTrainerId())).thenReturn(new Trainer());
         when(traineeDAO.findById(training.getTraineeId())).thenReturn(new Trainee());
@@ -92,9 +92,9 @@ class TrainingServiceTest {
 
     @Test
     void testCreate_specialityDoesNotMatch() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
         Trainer trainer = new Trainer();
-        trainer.setSpeciality(TrainingType.CALISTHENICS);
+        trainer.setSpeciality(TrainingTypes.CALISTHENICS);
 
         when(trainerDAO.findById(training.getTrainerId())).thenReturn(trainer);
         when(traineeDAO.findById(training.getTraineeId())).thenReturn(new Trainee());
@@ -111,9 +111,9 @@ class TrainingServiceTest {
 
     @Test
     void testCreate() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
         Trainer trainer = new Trainer();
-        trainer.setSpeciality(TrainingType.STRENGTH);
+        trainer.setSpeciality(TrainingTypes.STRENGTH);
 
         when(trainerDAO.findById(training.getTrainerId())).thenReturn(trainer);
         when(traineeDAO.findById(training.getTraineeId())).thenReturn(new Trainee());
@@ -129,7 +129,7 @@ class TrainingServiceTest {
 
     @Test
     void testGet() {
-        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
+        Training training = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
 
         when(trainingDAO.findById(anyString())).thenReturn(training);
 
@@ -147,8 +147,8 @@ class TrainingServiceTest {
 
     @Test
     void testGetAll() {
-        Training training1 = new Training(6L, 5L, "Late Strenght Training", TrainingType.STRENGTH, new Date(), "PT1H");
-        Training training2 = new Training(3L, 4L, "Morning Weight Training", TrainingType.WEIGHTLIFTING, new Date(), "PT1H");
+        Training training1 = new Training(6L, 5L, "Late Strenght Training", TrainingTypes.STRENGTH, new Date(), "PT1H");
+        Training training2 = new Training(3L, 4L, "Morning Weight Training", TrainingTypes.WEIGHTLIFTING, new Date(), "PT1H");
         List<Training> allTrainings = Arrays.asList(training1, training2);
 
         when(trainingService.getAll()).thenReturn(allTrainings);

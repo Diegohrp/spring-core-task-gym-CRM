@@ -96,5 +96,4 @@ public class StorageConfig {
     public TrainingStorage trainingStorage() {
         return new TrainingStorage();
     }
-
 }

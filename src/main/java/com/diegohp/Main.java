@@ -3,9 +3,12 @@ package com.diegohp;
 import com.diegohp.config.AppConfig;
 import com.diegohp.dto.trainee.CreateTraineeDto;
 import com.diegohp.dto.trainee.UpdateTraineeDto;
+import com.diegohp.dto.trainer.CreateTrainerDto;
+import com.diegohp.dto.trainer.UpdateTrainerDto;
 import com.diegohp.dto.user.CreateUserDto;
 import com.diegohp.dto.user.UpdateUserDto;
 import com.diegohp.service.TraineeService;
+import com.diegohp.service.TrainerService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -29,8 +32,32 @@ public class Main {
         traineeService.toggleActive("El Serpiente.Diaz", false);
         traineeService.delete("Miguel.Diaz");
         traineeService.delete("El Serpiente.Diaz");
+
+        TrainerService trainerService = context.getBean(TrainerService.class);
+        CreateTrainerDto trainerDto = new CreateTrainerDto(
+                new CreateUserDto("Johny", "Lawrence"), 4L
+        );
+        trainerService.create(trainerDto);
+        trainerService.update("John.Kreese", new UpdateTrainerDto(
+                new UpdateUserDto("King", "Cobra", null, null),
+                3L
+        ));
+
+        trainerService.update("Johny.Lawrence", new UpdateTrainerDto(
+                new UpdateUserDto("King", "Cobra", null, null),
+                3L
+        ));
+
+        trainerService.update("King.Cobra", new UpdateTrainerDto(
+                new UpdateUserDto(null, null, null, "Iron Eagle"),
+                3L
+        ));
+
     }
-    /*
+    /*-
+
+
+    -
     private static void trainees() throws ParseException {
         TraineeService traineeService = context.getBean(TraineeService.class);
         //Show all Trainees in storage
