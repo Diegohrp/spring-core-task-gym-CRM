@@ -60,6 +60,9 @@ public class Main {
         trainingService.create(new CreateTrainingDto(
                 1L, 1L, "Cobra Kai Training", new Date(), 10
         ));
+        trainingService.create(new CreateTrainingDto(
+                1L, 1L, "Cobra Kai Training", new Date(), 10
+        ));
 
     }
     /*-
