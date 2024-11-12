@@ -1,8 +1,5 @@
 package com.diegohp.config.storage;
 
-import com.diegohp.storage.TraineeStorage;
-import com.diegohp.storage.TrainerStorage;
-import com.diegohp.storage.TrainingStorage;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -80,20 +77,5 @@ public class StorageConfig {
         properties.setProperty("hibernate.hbm2ddl.auto", dbDDL);
         properties.setProperty("hibernate.dialect", dbDialect);
         return properties;
-    }
-
-    @Bean
-    public TraineeStorage traineeStorage() {
-        return new TraineeStorage();
-    }
-
-    @Bean
-    public TrainerStorage trainerStorage() {
-        return new TrainerStorage();
-    }
-
-    @Bean
-    public TrainingStorage trainingStorage() {
-        return new TrainingStorage();
     }
 }

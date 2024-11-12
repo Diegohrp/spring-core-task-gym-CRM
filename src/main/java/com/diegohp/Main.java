@@ -8,7 +8,7 @@ import com.diegohp.dto.trainer.UpdateTrainerDto;
 import com.diegohp.dto.training.CreateTrainingDto;
 import com.diegohp.dto.user.CreateUserDto;
 import com.diegohp.dto.user.UpdateUserDto;
-import com.diegohp.entity.training.Training;
+
 import com.diegohp.service.TraineeService;
 import com.diegohp.service.TrainerService;
 import com.diegohp.service.TrainingService;
