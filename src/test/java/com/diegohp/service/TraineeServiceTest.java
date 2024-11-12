@@ -1,8 +1,14 @@
 package com.diegohp.service;
 
-import com.diegohp.dao.TraineeDAO;
+import com.diegohp.dto.trainee.CreateTraineeDto;
+import com.diegohp.dto.trainee.UpdateTraineeDto;
+import com.diegohp.dto.user.CreateUserDto;
+import com.diegohp.dto.user.UpdateUserDto;
 import com.diegohp.entity.user.Trainee;
-import com.diegohp.utils.UserCredentialsGenerator;
+import com.diegohp.entity.user.User;
+import com.diegohp.repository.interfaces.TraineeRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,11 +16,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -23,101 +27,80 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class TraineeServiceTest {
     @Mock
-    private TraineeDAO traineeDAO;
-
+    private TraineeRepository traineeRepository;
     @Mock
-    private UserCredentialsGenerator userCredentialsGenerator;
-
+    private UserService userService;
     @Mock
     private Logger logger;
-
     @InjectMocks
     private TraineeService traineeService;
+    private CreateTraineeDto traineeDto;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(traineeService, "idGen", 5L);
+        CreateUserDto userDto = new CreateUserDto("John", "Doe");
+        traineeDto = new CreateTraineeDto(userDto, new Date(), "123 Main St");
         traineeService.setLogger(logger);
-    }
-
-
-    @Test
-    void testUserNameExists() {
-        Trainee trainee = new Trainee(1L, "John", "Doe", "John.Doe", "3Ue47&hO*/", true, new Date(), "013 Street Some City");
-
-        when(traineeDAO.findByUsername("existing")).thenReturn(trainee);
-        when(traineeDAO.findByUsername("nonexisting")).thenReturn(null);
-
-        assertTrue(traineeService.userNameExists("existing"));
-        assertFalse(traineeService.userNameExists("nonexisting"));
     }
 
     @Test
     void testCreate() {
-        Trainee trainee1 = new Trainee("John", "Doe", new Date(), "013 Street Some City");
-        Trainee trainee2 = new Trainee("Jane", "Doe", new Date(), "013 Street Some City");
-
-        doNothing().when(userCredentialsGenerator).assignCredentials(any(Trainee.class), any());
-
-        traineeService.create(trainee1);
-        verify(traineeDAO).create(argThat(t -> t.getId() == 5L));
-        verify(logger).info(contains("Trainee Creation"));
-
-        traineeService.create(trainee2);
-        verify(traineeDAO).create(argThat(t -> t.getId() == 6L));
-
+        when(userService.create(anyString(), anyString())).thenReturn(new User());
+        doNothing().when(traineeRepository).create(any(Trainee.class));
+        String password = traineeService.create(traineeDto);
+        verify(userService, times(1)).create(anyString(), anyString());
+        verify(traineeRepository, times(1)).create(any(Trainee.class));
     }
 
     @Test
-    void testGet() {
-        Trainee trainee = new Trainee(1L, "John", "Doe", "John.Doe", "3Ue47&hO*/", true, new Date(), "013 Street Some City");
-
-        when(traineeDAO.findById(trainee.getId())).thenReturn(trainee);
-
-        assertEquals(trainee, traineeService.get(1L));
-        verify(logger).info(contains("Select Trainee"));
-
+    void testGetById() {
+        Trainee trainee = new Trainee(new Date(), "123 Main St");
+        when(traineeRepository.getById(anyLong())).thenReturn(Optional.of(trainee));
+        Optional<Trainee> result = traineeService.getById(1L);
+        verify(traineeRepository, times(1)).getById(anyLong());
+        assertTrue(result.isPresent());
     }
 
     @Test
-    void testGetNotFound() {
-        when(traineeDAO.findById(4L)).thenReturn(null);
-        assertNull(traineeService.get(4L));
-        verify(logger).info(contains("Select Trainee"));
+    void testGetByIdNotFound() {
+        when(traineeRepository.getById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> traineeService.getById(1L));
+    }
+
+    @Test
+    void testGetByUsername() {
+        Trainee trainee = new Trainee(new Date(), "123 Main St");
+        when(traineeRepository.getByUsername(anyString())).thenReturn(Optional.of(trainee));
+        Optional<Trainee> result = traineeService.getByUsername("johndoe");
+        verify(traineeRepository, times(1)).getByUsername(anyString());
+        assertTrue(result.isPresent());
     }
 
     @Test
     void testUpdate() {
-        Trainee original = new Trainee(1L, "John", "Doe", "John.Doe", "3Ue47&hO*/", true, new Date(), "013 Street Some City");
-        Trainee updated = new Trainee(original);
-        updated.setFirstName("Jane");
-        updated.setLastName("Who");
+        Trainee trainee = new Trainee(new Date(), "123 Main St");
+        trainee.setUser(new User("John", "Doe"));
+        UpdateTraineeDto updateDto = new UpdateTraineeDto(new UpdateUserDto("Jane", "Doe", null, null), new Date(), "456 Elm St");
+        when(traineeRepository.getByUsername(anyString())).thenReturn(Optional.of(trainee));
+        traineeService.update("John.Doe", updateDto);
+        verify(traineeRepository, times(1)).getByUsername(anyString());
+        verify(traineeRepository, times(1)).update(any(Trainee.class));
+    }
 
-        when(traineeDAO.findById(original.getId())).thenReturn(original);
-        when(userCredentialsGenerator.generateUsername(anyString(), anyString(), any())).thenReturn("Jane.Who");
-
-        traineeService.update(1L, updated);
-        verify(traineeDAO).update(eq(1L), argThat(t -> t.getFirstName().equals("Jane") && t.getLastName().equals("Who")));
-        verify(logger).info(contains("Update Trainee"));
+    @Test
+    void testToggleActive() {
+        doNothing().when(userService).toggleActive(anyString(), anyBoolean());
+        traineeService.toggleActive("johndoe", true);
+        verify(userService, times(1)).toggleActive(anyString(), anyBoolean());
     }
 
     @Test
     void testDelete() {
-        traineeService.delete(1L);
-
-        verify(traineeDAO).delete(eq(1L));
-        verify(logger).info(contains("Delete Trainee"));
-    }
-
-    @Test
-    void getAll() {
-        Trainee trainee1 = new Trainee("John", "Doe", new Date(), "013 Street Some City");
-        Trainee trainee2 = new Trainee("Jane", "Doe", new Date(), "013 Street Some City");
-
-        List<Trainee> trainees = Arrays.asList(trainee1, trainee2);
-        when(traineeDAO.getAll()).thenReturn(trainees);
-
-        assertEquals(trainees, traineeService.getAll());
-        verify(logger).info(contains("Get All Trainees"));
+        Trainee trainee = new Trainee(new Date(), "123 Main St");
+        when(traineeRepository.getByUsername(anyString())).thenReturn(Optional.of(trainee));
+        doNothing().when(traineeRepository).delete(any(Trainee.class));
+        traineeService.delete("johndoe");
+        verify(traineeRepository, times(1)).getByUsername(anyString());
+        verify(traineeRepository, times(1)).delete(any(Trainee.class));
     }
 }

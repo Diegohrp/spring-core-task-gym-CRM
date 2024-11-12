@@ -1,9 +1,15 @@
 package com.diegohp.service;
 
-import com.diegohp.dao.TrainerDAO;
-import com.diegohp.entity.training.enums.TrainingTypes;
+import com.diegohp.dto.trainer.CreateTrainerDto;
+import com.diegohp.dto.trainer.UpdateTrainerDto;
+import com.diegohp.dto.user.CreateUserDto;
+import com.diegohp.dto.user.UpdateUserDto;
+import com.diegohp.entity.training.TrainingType;
 import com.diegohp.entity.user.Trainer;
-import com.diegohp.utils.UserCredentialsGenerator;
+
+import com.diegohp.entity.user.User;
+import com.diegohp.repository.interfaces.TrainerRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,109 +17,105 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.slf4j.Logger;
-import org.springframework.test.util.ReflectionTestUtils;
 
-import java.util.Arrays;
+
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.argThat;
-import static org.mockito.ArgumentMatchers.contains;
+
 import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class TrainerServiceTest {
     @Mock
-    private TrainerDAO trainerDAO;
-
+    private TrainerRepository trainerRepository;
     @Mock
-    private UserCredentialsGenerator userCredentialsGenerator;
-
+    private UserService userService;
+    @Mock
+    private TrainingTypeService trainingTypeService;
     @Mock
     private Logger logger;
-
     @InjectMocks
     private TrainerService trainerService;
+    private CreateTrainerDto trainerDto;
 
     @BeforeEach
     void setUp() {
-        ReflectionTestUtils.setField(trainerService, "idGen", 5L);
+        CreateUserDto userDto = new CreateUserDto("John", "Doe");
+        trainerDto = new CreateTrainerDto(userDto, 1L);
         trainerService.setLogger(logger);
     }
 
     @Test
-    void testUserNameExists() {
-        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
-
-        when(trainerDAO.findByUsername("existing")).thenReturn(trainer);
-        when(trainerDAO.findByUsername("nonexisting")).thenReturn(null);
-
-        assertTrue(trainerService.userNameExists("existing"));
-        assertFalse(trainerService.userNameExists("nonexisting"));
-    }
-
-    @Test
     void testCreate() {
-        Trainer trainer1 = new Trainer("Miguel", "Diaz", TrainingTypes.BOXING);
-        Trainer trainer2 = new Trainer("Jane", "Doe", TrainingTypes.CYCLING);
-
-        doNothing().when(userCredentialsGenerator).assignCredentials(any(Trainer.class), any());
-
-        trainerService.create(trainer1);
-        verify(trainerDAO).create(argThat(t -> t.getId() == 5L));
-        verify(logger).info(contains("Trainer Creation"));
-
-        trainerService.create(trainer2);
-        verify(trainerDAO).create(argThat(t -> t.getId() == 6L));
+        when(trainingTypeService.getById(anyLong())).thenReturn(new TrainingType());
+        when(userService.create(anyString(), anyString())).thenReturn(new User());
+        doNothing().when(trainerRepository).create(any(Trainer.class));
+        String password = trainerService.create(trainerDto);
+        verify(trainingTypeService, times(1)).getById(anyLong());
+        verify(userService, times(1)).create(anyString(), anyString());
+        verify(trainerRepository, times(1)).create(any(Trainer.class));
     }
 
     @Test
-    void testGet() {
-        Trainer trainer = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
-        when(trainerDAO.findById(trainer.getId())).thenReturn(trainer);
-
-        assertEquals(trainer, trainerService.get(1L));
-        verify(logger).info(contains("Get Trainer"));
-    }
-
-    @Test
-    void testGetNotFound() {
-        when(trainerDAO.findById(4L)).thenReturn(null);
-        assertNull(trainerService.get(4L));
-        verify(logger).info(contains("Get Trainer"));
-    }
-
-    @Test
-    void testGetAll() {
-        Trainer trainer1 = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
-        Trainer trainer2 = new Trainer(2L, "Jane", "Doe", "Jane.Doe", "4Et49&kP<-", true, TrainingTypes.CYCLING);
-
-        List<Trainer> trainers = Arrays.asList(trainer1, trainer2);
-        when(trainerDAO.getAll()).thenReturn(trainers);
-
-        assertEquals(trainers, trainerService.getAll());
-        verify(logger).info(contains("Get All Trainers"));
+    void testGetByUsername() {
+        Trainer trainer = new Trainer();
+        when(trainerRepository.getByUsername(anyString())).thenReturn(Optional.of(trainer));
+        Optional<Trainer> result = trainerService.getByUsername("johndoe");
+        verify(trainerRepository, times(1)).getByUsername(anyString());
+        assertTrue(result.isPresent());
     }
 
     @Test
     void testUpdate() {
-        Trainer original = new Trainer(1L, "Miguel", "Diaz", "Miguel.Diaz", "8Wdh3&pd*)", true, TrainingTypes.BOXING);
-        Trainer updated = new Trainer(original);
-        updated.setFirstName("John");
-        updated.setLastName("Doe");
-        updated.setSpeciality(TrainingTypes.STRENGTH);
-
-        when(trainerDAO.findById(original.getId())).thenReturn(original);
-        when(userCredentialsGenerator.generateUsername(anyString(), anyString(), any())).thenReturn("John.Doe");
-
-        trainerService.update(1L, updated);
-        verify(trainerDAO).update(eq(1L), argThat(t -> t.getFirstName().equals("John")
-                && t.getLastName().equals("Doe")
-                && t.getSpeciality() == TrainingTypes.STRENGTH));
-        verify(logger).info(contains("Update Trainer"));
+        Trainer trainer = new Trainer();
+        trainer.setUser(new User("John", "Doe"));
+        trainer.setSpeciality(new TrainingType("Some Training"));
+        UpdateTrainerDto updateDto = new UpdateTrainerDto(new UpdateUserDto("Jane", "Doe", null, null), 2L);
+        when(trainerRepository.getByUsername(anyString())).thenReturn(Optional.of(trainer));
+        when(trainingTypeService.getById(anyLong())).thenReturn(new TrainingType());
+        trainerService.update("johndoe", updateDto);
+        verify(trainerRepository, times(1)).getByUsername(anyString());
+        verify(trainerRepository, times(1)).update(any(Trainer.class));
     }
 
+    @Test
+    void testToggleActive() {
+        doNothing().when(userService).toggleActive(anyString(), anyBoolean());
+        trainerService.toggleActive("johndoe", true);
+        verify(userService, times(1)).toggleActive(anyString(), anyBoolean());
+    }
 
+    @Test
+    void testGetById() {
+        Trainer trainer = new Trainer();
+        when(trainerRepository.getById(anyLong())).thenReturn(Optional.of(trainer));
+        Optional<Trainer> result = trainerService.getById(1L);
+        verify(trainerRepository, times(1)).getById(anyLong());
+        assertTrue(result.isPresent());
+    }
+
+    @Test
+    void testGetByIdNotFound() {
+        when(trainerRepository.getById(anyLong())).thenReturn(Optional.empty());
+        assertThrows(EntityNotFoundException.class, () -> trainerService.getById(1L));
+    }
+
+    @Test
+    void testGetUnassigned() {
+        List<Trainer> trainers = new ArrayList<>();
+        Trainer trainer = new Trainer();
+        trainer.setUser(new User("John", "Doe"));
+        trainer.setSpeciality(new TrainingType("Some Training"));
+        trainers.add(trainer);
+        when(trainerRepository.getUnassigned(anyString())).thenReturn(Optional.of(trainers));
+        Optional<List<Trainer>> result = trainerService.getUnassigned("trainee");
+        verify(trainerRepository, times(1)).getUnassigned(anyString());
+        assertTrue(result.isPresent());
+        assertEquals(1, result.get().size());
+    }
 }
