@@ -29,7 +29,7 @@ public class TrainingTypeService {
     }
 
     public void create(TrainingType trainingType) {
-        logger.info("------------------------------------------ Create Training Type ---------------------------------------");
+        logger.info("-------------------------------------------------- Create Training Type --------------------------------------------------");
         repository.create(trainingType);
         logger.info("Training Type: {} has been created", trainingType.getName());
     }

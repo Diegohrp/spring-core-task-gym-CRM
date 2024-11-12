@@ -39,7 +39,7 @@ public class TrainingService {
 
     @Transactional
     public void create(CreateTrainingDto trainingDto) {
-        logger.info("------------------------------- Training Creation -----------------------------------------");
+        logger.info("-------------------------------------------------- Training Creation --------------------------------------------------");
         try {
             Trainee trainee = traineeService.getById(trainingDto.getTraineeId()).get();
             Trainer trainer = trainerService.getById(trainingDto.getTrainerId()).get();
@@ -54,7 +54,7 @@ public class TrainingService {
 
     public Optional<List<Training>> getTraineeTrainings(String trainee, Date fromDate, Date toDate, String trainerName, Long type) {
         Optional<List<Training>> trainings = repository.getByCriteria(trainee, fromDate, toDate, trainerName, type);
-        logger.info("------------------------------------------------- Trainee Trainings By Criteria --------------------------------------------------");
+        logger.info("-------------------------------------------------- Trainee Trainings By Criteria --------------------------------------------------");
         if (trainings.isPresent()) {
             for (Training t : trainings.get()) {
                 logger.info(t.toString());
@@ -65,7 +65,7 @@ public class TrainingService {
 
     public Optional<List<Training>> getTrainerTrainings(String trainer, Date fromDate, Date toDate, String traineeName) {
         Optional<List<Training>> trainings = repository.getByCriteria(trainer, fromDate, toDate, traineeName);
-        logger.info("------------------------------------------------- Trainer Trainings By Criteria --------------------------------------------------");
+        logger.info("-------------------------------------------------- Trainer Trainings By Criteria --------------------------------------------------");
         if (trainings.isPresent()) {
             for (Training t : trainings.get()) {
                 logger.info(t.toString());

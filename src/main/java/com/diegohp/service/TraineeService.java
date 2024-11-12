@@ -33,7 +33,7 @@ public class TraineeService {
 
     @Transactional
     public String create(CreateTraineeDto traineeDto) {
-        logger.info("-------------------------Trainee Creation----------------------------------------------");
+        logger.info("-------------------------------------------------- Trainee Creation --------------------------------------------------");
         User user = userService.create(traineeDto.getUserDto().getFirstName(), traineeDto.getUserDto().getLastName());
         Trainee trainee = new Trainee(traineeDto.getDateOfBirth(), traineeDto.getAddress());
         trainee.setUser(user);
@@ -43,7 +43,7 @@ public class TraineeService {
     }
 
     public Optional<Trainee> getById(Long id) {
-        logger.info("-------------------------------Select Trainee By Id-----------------------------------------");
+        logger.info("-------------------------------------------------- Select Trainee By Id --------------------------------------------------");
         Optional<Trainee> trainee = repository.getById(id);
         if (trainee.isEmpty()) {
             throw new EntityNotFoundException("Trainee with ID: " + id + " not found");
@@ -54,7 +54,7 @@ public class TraineeService {
 
     @Transactional
     public Optional<Trainee> getByUsername(String username) {
-        logger.info("-------------------------------Select Trainee By Username-----------------------------------------");
+        logger.info("-------------------------------------------------- Select Trainee By Username --------------------------------------------------");
         Optional<Trainee> trainee = repository.getByUsername(username);
         if (trainee.isPresent()) {
             logger.info("You selected Trainee with username {}: {}", username, trainee.get());
@@ -66,7 +66,7 @@ public class TraineeService {
 
     @Transactional
     public void update(String username, UpdateTraineeDto traineeDto) {
-        logger.info("-------------------------------Update Trainee-----------------------------------------");
+        logger.info("-------------------------------------------------- Update Trainee --------------------------------------------------");
         Optional<Trainee> trainee = this.getByUsername(username);
         if (trainee.isPresent()) {
             Trainee original = new Trainee(trainee.get());
@@ -80,13 +80,13 @@ public class TraineeService {
     }
 
     public void toggleActive(String username, Boolean active) {
-        logger.info("--------------------------------------- Modifying Trainee Status -----------------------------------");
+        logger.info("-------------------------------------------------- Modifying Trainee Status --------------------------------------------------");
         userService.toggleActive(username, active);
     }
 
     @Transactional
     public void delete(String username) {
-        logger.info("---------------------------------------- Delete Trainee --------------------------------------------");
+        logger.info("-------------------------------------------------- Delete Trainee --------------------------------------------------");
         Optional<Trainee> trainee = this.getByUsername(username);
         if (trainee.isPresent()) {
             repository.delete(trainee.get());

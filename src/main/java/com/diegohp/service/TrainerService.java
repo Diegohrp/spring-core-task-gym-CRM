@@ -38,7 +38,7 @@ public class TrainerService {
 
     @Transactional
     public String create(CreateTrainerDto trainerDto) {
-        logger.info("---------------------------------------------- Trainer Creation ----------------------------------------------");
+        logger.info("-------------------------------------------------- Trainer Creation --------------------------------------------------");
         Trainer trainer = new Trainer();
         try {
             trainer.setSpeciality(trainingTypeService.getById(trainerDto.getSpeciality()));
@@ -55,7 +55,7 @@ public class TrainerService {
 
     @Transactional
     public Optional<Trainer> getByUsername(String username) {
-        logger.info("-------------------------------Select Trainer By Username-----------------------------------------");
+        logger.info("-------------------------------------------------- Select Trainer By Username --------------------------------------------------");
         Optional<Trainer> trainer = repository.getByUsername(username);
         if (trainer.isPresent()) {
             logger.info("You selected Trainer with username {}: {}", username, trainer.get());
@@ -67,7 +67,7 @@ public class TrainerService {
 
     @Transactional
     public void update(String username, UpdateTrainerDto trainerDto) {
-        logger.info("-------------------------------Update Trainer-----------------------------------------");
+        logger.info("-------------------------------------------------- Update Trainer --------------------------------------------------");
         Optional<Trainer> trainer = this.getByUsername(username);
         if (trainer.isEmpty()) {
             return;
@@ -87,12 +87,12 @@ public class TrainerService {
     }
 
     public void toggleActive(String username, Boolean active) {
-        logger.info("--------------------------------------- Modifying Trainer Status -----------------------------------");
+        logger.info("-------------------------------------------------- Modifying Trainer Status --------------------------------------------------");
         userService.toggleActive(username, active);
     }
 
     public Optional<Trainer> getById(Long id) {
-        logger.info("-------------------------------Select Trainer By Id-----------------------------------------");
+        logger.info("-------------------------------------------------- Select Trainer By Id --------------------------------------------------");
         Optional<Trainer> trainer = repository.getById(id);
         if (trainer.isEmpty()) {
             throw new EntityNotFoundException("Trainer with ID: " + id + " not found");
@@ -102,7 +102,7 @@ public class TrainerService {
     }
 
     public Optional<List<Trainer>> getUnassigned(String trainee) {
-        logger.info("------------------------- These Trainers are not assigned to {} -------------------------", trainee);
+        logger.info("-------------------------------------------------- These Trainers are not assigned to {} --------------------------------------------------", trainee);
         Optional<List<Trainer>> trainers = repository.getUnassigned(trainee);
         if (trainers.isPresent()) {
             for (Trainer t : trainers.get()) {
