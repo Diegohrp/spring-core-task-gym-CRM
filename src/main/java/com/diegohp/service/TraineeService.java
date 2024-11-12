@@ -32,13 +32,14 @@ public class TraineeService {
     }
 
     @Transactional
-    public void create(CreateTraineeDto traineeDto) {
+    public String create(CreateTraineeDto traineeDto) {
         logger.info("-------------------------Trainee Creation----------------------------------------------");
         User user = userService.create(traineeDto.getUserDto().getFirstName(), traineeDto.getUserDto().getLastName());
         Trainee trainee = new Trainee(traineeDto.getDateOfBirth(), traineeDto.getAddress());
         trainee.setUser(user);
         repository.create(trainee);
         logger.info("New Trainee created: {}", trainee);
+        return trainee.getUser().getPassword();
     }
 
     public Optional<Trainee> getById(Long id) {

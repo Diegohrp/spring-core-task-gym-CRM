@@ -36,7 +36,7 @@ public class TrainerService {
     }
 
     @Transactional
-    public void create(CreateTrainerDto trainerDto) {
+    public String create(CreateTrainerDto trainerDto) {
         logger.info("---------------------------------------------- Trainer Creation ----------------------------------------------");
         Trainer trainer = new Trainer();
         try {
@@ -45,8 +45,10 @@ public class TrainerService {
             trainer.setUser(user);
             repository.create(trainer);
             logger.info("New Trainer created: {}", trainer);
+            return trainer.getUser().getPassword();
         } catch (EntityNotFoundException e) {
             logger.error(e.getMessage());
+            return "";
         }
     }
 

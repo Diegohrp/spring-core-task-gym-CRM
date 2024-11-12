@@ -95,5 +95,28 @@ public class UserService {
         return !updated.getFirstName().equals(prevFirstName)
                 || !updated.getLastName().equals(prevLastName);
     }
+
+    @Transactional
+    public boolean login(String username, String password) {
+        Optional<User> user = repository.findByUsername(username);
+        if (user.isPresent() && user.get().getPassword().equals(password)) {
+            logger.info("Login successful");
+            return true;
+        }
+        logger.error("Wrong username or password");
+        return false;
+    }
+
+    @Transactional
+    public void changePassword(String username, String oldPassword, String newPassword) {
+        Optional<User> user = repository.findByUsername(username);
+        if (user.isPresent() && user.get().getPassword().equals(oldPassword)) {
+            user.get().setPassword(newPassword);
+            repository.update(user.get());
+            logger.info("Password changed successfully");
+            return;
+        }
+        logger.error("It wasn't possible to change your password due to wrong credentials");
+    }
 }
 
