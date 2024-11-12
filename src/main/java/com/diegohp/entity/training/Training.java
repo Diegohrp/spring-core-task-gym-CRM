@@ -40,6 +40,15 @@ public class Training {
 
     }
 
+    public Training(Trainee trainee, Trainer trainer, String name, TrainingType type, Date date, Integer duration) {
+        this.trainee = trainee;
+        this.trainer = trainer;
+        this.name = name;
+        this.type = type;
+        this.date = date;
+        this.duration = duration;
+    }
+
     /*@JsonCreator
     public Training(@JsonProperty("traineeId") Long traineeId, @JsonProperty("trainerId") Long trainerId,
                     @JsonProperty("name") String name, @JsonProperty("type") TrainingType type,
@@ -66,7 +75,7 @@ public class Training {
 
     @Override
     public String toString() {
-        return "Training={ trainerId: " + this.trainer + ", traineeId: " + this.trainee + ", name: " + this.name + ", type: " + this.type + ", date: " + this.date + ", duration: " + this.duration + " }";
+        return "Training={ trainer: " + this.trainer.getUser().getUsername() + ", trainee: " + this.trainee.getUser().getUsername() + ", name: " + this.name + ", type: " + this.type.getName() + ", date: " + this.date + ", duration: " + this.duration + " }";
     }
 
     /*

@@ -87,4 +87,14 @@ public class TrainerService {
         logger.info("--------------------------------------- Modifying Trainer Status -----------------------------------");
         userService.toggleActive(username, active);
     }
+
+    public Optional<Trainer> getById(Long id) {
+        logger.info("-------------------------------Select Trainer By Id-----------------------------------------");
+        Optional<Trainer> trainer = repository.getById(id);
+        if (trainer.isEmpty()) {
+            throw new EntityNotFoundException("Trainer with ID: " + id + " not found");
+        }
+        logger.info("You selected Trainer with ID {}: {}", id, trainer.get());
+        return trainer;
+    }
 }

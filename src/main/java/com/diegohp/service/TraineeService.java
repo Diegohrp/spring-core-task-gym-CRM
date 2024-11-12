@@ -5,6 +5,7 @@ import com.diegohp.dto.trainee.UpdateTraineeDto;
 import com.diegohp.entity.user.Trainee;
 import com.diegohp.entity.user.User;
 import com.diegohp.repository.interfaces.TraineeRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +44,10 @@ public class TraineeService {
     public Optional<Trainee> getById(Long id) {
         logger.info("-------------------------------Select Trainee By Id-----------------------------------------");
         Optional<Trainee> trainee = repository.getById(id);
-        if (trainee.isPresent()) {
-            logger.info("You selected Trainee with ID {}: {}", id, trainee.get());
-        } else {
-            logger.warn("Trainee with ID: {} not found", id);
+        if (trainee.isEmpty()) {
+            throw new EntityNotFoundException("Trainee with ID: " + id + " not found");
         }
+        logger.info("You selected Trainee with ID {}: {}", id, trainee.get());
         return trainee;
     }
 

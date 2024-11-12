@@ -5,10 +5,13 @@ import com.diegohp.dto.trainee.CreateTraineeDto;
 import com.diegohp.dto.trainee.UpdateTraineeDto;
 import com.diegohp.dto.trainer.CreateTrainerDto;
 import com.diegohp.dto.trainer.UpdateTrainerDto;
+import com.diegohp.dto.training.CreateTrainingDto;
 import com.diegohp.dto.user.CreateUserDto;
 import com.diegohp.dto.user.UpdateUserDto;
+import com.diegohp.entity.training.Training;
 import com.diegohp.service.TraineeService;
 import com.diegohp.service.TrainerService;
+import com.diegohp.service.TrainingService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -29,9 +32,9 @@ public class Main {
                 new UpdateUserDto("El Serpiente", null, null, null),
                 null, null
         ));
-        traineeService.toggleActive("El Serpiente.Diaz", false);
-        traineeService.delete("Miguel.Diaz");
-        traineeService.delete("El Serpiente.Diaz");
+        //traineeService.toggleActive("El Serpiente.Diaz", false);
+        //traineeService.delete("Miguel.Diaz");
+        //traineeService.delete("El Serpiente.Diaz");
 
         TrainerService trainerService = context.getBean(TrainerService.class);
         CreateTrainerDto trainerDto = new CreateTrainerDto(
@@ -51,6 +54,11 @@ public class Main {
         trainerService.update("King.Cobra", new UpdateTrainerDto(
                 new UpdateUserDto(null, null, null, "Iron Eagle"),
                 3L
+        ));
+
+        TrainingService trainingService = context.getBean(TrainingService.class);
+        trainingService.create(new CreateTrainingDto(
+                1L, 1L, "Cobra Kai Training", new Date(), 10
         ));
 
     }
