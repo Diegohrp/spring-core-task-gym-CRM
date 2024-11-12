@@ -2,6 +2,7 @@ package com.diegohp.repository.interfaces;
 
 import com.diegohp.entity.user.Trainer;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface TrainerRepository {
@@ -12,4 +13,6 @@ public interface TrainerRepository {
     Optional<Trainer> getByUsername(String username);
 
     void update(Trainer trainer);
+
+    Optional<List<Trainer>> getUnassigned(String trainee);
 }

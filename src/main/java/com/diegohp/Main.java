@@ -72,8 +72,14 @@ public class Main {
             traineeService.toggleActive("David.Buendia", false);
             traineeService.toggleActive("David.Buendia", true);
 
-            //16. Add Training
+            //16. Add Training and 18. Update Tranee's trainers list
+            // When you add a new training, the Trainers list is updated
             trainingService.create(new CreateTrainingDto(11L, 1L, "New Training Cardio", new Date(), 30));
+
+            // 17. Get trainers list that not assigned on trainee by trainee's username.
+            trainerService.getUnassigned("David.Buendia");
+            // 13. Delete Trainee Profile by username
+            traineeService.delete("David.Buendia");
         }
 
 

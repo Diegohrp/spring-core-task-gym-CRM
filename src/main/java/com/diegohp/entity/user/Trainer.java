@@ -65,6 +65,10 @@ public class Trainer {
         return user;
     }
 
+    public List<Training> getTrainings() {
+        return trainings;
+    }
+
     @Override
     public String toString() {
         return "Trainer={ " + user.toString() + ", speciality: " + this.speciality.getName() + " }";

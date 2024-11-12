@@ -25,7 +25,7 @@ public class Trainee {
     @JoinColumn(name = "user_id", unique = true, nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "trainee")
+    @OneToMany(mappedBy = "trainee", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Training> trainings;
 
     /*public Trainee(@JsonProperty("id") Long id, @JsonProperty("firstName") String firstName,

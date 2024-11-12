@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -98,5 +99,16 @@ public class TrainerService {
         }
         logger.info("You selected Trainer with ID {}: {}", id, trainer.get());
         return trainer;
+    }
+
+    public Optional<List<Trainer>> getUnassigned(String trainee) {
+        logger.info("------------------------- These Trainers are not assigned to {} -------------------------", trainee);
+        Optional<List<Trainer>> trainers = repository.getUnassigned(trainee);
+        if (trainers.isPresent()) {
+            for (Trainer t : trainers.get()) {
+                logger.info(t.toString());
+            }
+        }
+        return trainers;
     }
 }

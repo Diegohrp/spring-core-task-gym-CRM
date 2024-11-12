@@ -8,6 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import jakarta.persistence.TypedQuery;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -42,5 +43,15 @@ public class TrainerRepositoryImpl implements TrainerRepository {
     @Override
     public void update(Trainer trainer) {
         this.entityManager.merge(trainer);
+    }
+
+    @Override
+    public Optional<List<Trainer>> getUnassigned(String trainee) {
+        TypedQuery<Trainer> query = entityManager.createQuery(
+                "SELECT t FROM Trainer t WHERE t NOT IN " +
+                        "(SELECT t2 FROM Trainer  t2 INNER JOIN t2.trainings trainings WHERE trainings.trainee.user.username =: trainee)",
+                Trainer.class);
+        query.setParameter("trainee", trainee);
+        return Optional.of(query.getResultList());
     }
 }
